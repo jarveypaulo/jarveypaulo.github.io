@@ -1,0 +1,18 @@
+<core:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:core="sap.ui.core"
+	xmlns:mvc="sap.ui.core.mvc"
+	controllerName="mm.controller.launchpad">
+	<Popover
+		id="popOverAccount"
+        showHeader="false" 
+		class="sapTntToolHeaderPopover"
+		placement="Bottom"
+		initialFocus="idAccount"
+        contentWidth="100px"
+		contentHeight="60px">
+        <Button id="idLogin" 
+			text="Log On" 
+			type="Transparent" press="onLogon" visible="true"/>
+	</Popover>
+</core:FragmentDefinition>
