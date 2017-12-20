@@ -1,0 +1,32 @@
+<mvc:View xmlns:l="sap.ui.layout" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:f="sap.ui.layout.form" controllerName="mm.apps.login_cp.controller.Login_cp">
+    <Page id="userLoginPage" title="{i18n>LoginPageTitle}" class="sapUiResponsiveContentPadding">
+        <content><VBox width="250px" id="vboxLogin" justifyContent="Center" fitContainer="true" alignContent="Center" class="sapUiForceWidthAuto" renderType="Bare" wrap="Wrap" alignItems="Center">
+                <items>
+                <HBox width="350px" id="hBoxUsername" alignContent="Center" displayInline="true" fitContainer="true" justifyContent="Center" direction="Column" alignItems="Center">
+                    <items>
+                        <Input xmlns="sap.m" id="usernameInput" type="Text" placeholder="Enter username..." required="true" class="sapUiTinyMargin" fieldWidth="" width="322px"/>
+                        
+                    </items>
+                </HBox>
+                <HBox width="350px" id="hBoxPassword" alignContent="Center" fitContainer="true" justifyContent="Center">
+                    <items>
+                        <Input xmlns="sap.m" id="passwordInput" type="Password" placeholder="Enter password..." required="true" class="sapUiTinyMargin" fieldWidth="" width="322px"/>
+		                
+                    </items>
+                </HBox><HBox width="350px" id="hBoxLoginButton" alignContent="Center" justifyContent="Center" renderType="Bare" fitContainer="true" wrap="Wrap" alignItems="Center">
+                    <items>
+                        <Button xmlns="sap.m" text="Log On" press="onLogin" width="100%" type="Emphasized" class="sapUiTinyMargin" id="bLogin" iconFirst="false">
+                        </Button>
+                    </items>
+                </HBox>
+                <HBox width="350px" id="hBoxChangePassword" alignContent="Center" displayInline="true" fitContainer="true" justifyContent="Center">
+                    <items>
+                        <Button xmlns="sap.m" text="Change Password" press="onChangePassword" width="322px" type="" class="" id="btnChangePassword">
+                        </Button>
+                    </items>
+                </HBox>
+                </items>
+            </VBox>
+        </content>
+    </Page>
+</mvc:View>

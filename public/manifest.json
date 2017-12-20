@@ -1,0 +1,236 @@
+{
+	"_version": "1.1.0",
+	"sap.app": {
+		"_version": "1.1.0",
+		"id": "mm",
+		"type": "application",
+		"i18n": "i18n/i18n.properties",
+		"applicationVersion": {
+			"version": "1.0.0"
+		},
+		"title": "{{appTitle}}",
+		"description": "{{appDescription}}"
+	},
+	"sap.ui": {
+		"_version": "1.1.0",
+		"technology": "UI5",
+		"icons": {
+			"icon": "",
+			"favIcon": "",
+			"phone": "",
+			"phone@2": "",
+			"tablet": "",
+			"tablet@2": ""
+		},
+		"deviceTypes": {
+			"desktop": true,
+			"tablet": true,
+			"phone": true
+		},
+		"supportedThemes": ["sap_hcb", "sap_bluecrystal"]
+	},
+	"sap.ui5": {
+		"_version": "1.1.0",
+		"handleValidation": true,
+		"rootView": {
+			"viewName": "mm.view.app",
+			"type": "XML"
+		},
+		"dependencies": {
+			"minUI5Version": "1.30.0",
+			"libs": {
+				"sap.ui.core": {},
+				"sap.m": {},
+				"sap.ui.layout": {}
+			}
+		},
+		"contentDensities": {
+			"compact": true,
+			"cozy": true
+		},
+		"models": {
+			"i18n": {
+				"type": "sap.ui.model.resource.ResourceModel",
+				"settings": {
+					"bundleName": "mm.i18n.i18n"
+				}
+			},
+			"apps": {
+				"type": "sap.ui.model.json.JSONModel",
+				"uri": "model/apps.json",
+				"preload": "true"
+			}
+		},
+		"routing": {
+			"config": {
+				"routerClass": "sap.m.routing.Router",
+				"viewType": "XML",
+				"viewPath": "mm.view",
+				"controlId": "idAppControl",
+				"controlAggregation": "detailPages",
+				"bypassed": {
+					"target": "notFound"
+				},
+				"async": true,
+				"transition": "slide",
+				"homeRoute": "launchpad"
+			},
+			"routes": [{
+				"name": "menu",
+				"pattern": "fleet/mm/apps/menu",
+				"target": ["launchpad", "menu"]
+			}, {
+				"name": "launchpad",
+				"pattern": "fleet/mm/apps/launchpad",
+				"target": ["menu", "launchpad"]
+			}, {
+				"name": "login",
+				"pattern": "",
+				"target": "login"
+			}, {
+				"name": "assignment",
+				"pattern": "fleet/mm/apps/assignment",
+				"target": "assignment"
+			}, {
+				"name": "newAssignment",
+				"pattern": "fleet/mm/apps/newAssignment",
+				"target": "newAssignment"
+			}, {
+				"name": "booking",
+				"pattern": "fleet/mm/apps/booking",
+				"target": "booking"
+			}, {
+				"name": "users",
+				"pattern": "fleet/mm/apps/users",
+				"target": "users"
+			}, {
+				"name": "user",
+				"pattern": "fleet/mm/apps/users/{userID}",
+				"target": "user"
+			}, {
+				"name": "vehicles",
+				"pattern": "fleet/mm/apps/vehicles",
+				"target": "vehicles"
+			}, {
+				"name": "vehicle",
+				"pattern": "fleet/mm/apps/vehicles/{vehicleID}",
+				"target": "vehicle"
+			}, {
+				"name": "manageVehicle",
+				"pattern": "fleet/mm/apps/newVehicle",
+				"target": "newVehicle"
+			}, {
+				"name": "profile",
+				"pattern": "fleet/mm/apps/profile",
+				"target": "profile"
+			}],
+			"targets": {
+				"menu": {
+					"viewId": "menu",
+					"viewName": "menu",
+					"viewType": "JS",
+					"viewLevel": 1,
+					"controlAggregation": "masterPages"
+				},
+				"notFound": {
+					"viewName": "NotFound",
+					"transition": "show"
+				},
+				"login": {
+					"viewId": "login",
+					"viewName": "Login",
+					"viewType": "XML",
+					"viewPath": "mm.apps.login.view",
+					"viewLevel": 1,
+					"transition": "show"
+				},
+				"launchpad": {
+					"viewId": "launchpad",
+					"viewName": "launchpad",
+					"viewType": "JS",
+					"viewLevel": 2,
+					"transition": "flip"
+				},
+				"assignment": {
+					"viewId": "assignment",
+					"viewName": "Assignment",
+					"viewType": "XML",
+					"viewPath": "mm.apps.assignment.view",
+					"viewLevel": 2,
+					"clearAggregation": false,
+					"controlAggregation": "detailPages",
+					"transition": "slide"
+				},
+				"newAssignment": {
+					"viewId": "newAssignment",
+					"viewName": "newAssignment",
+					"viewType": "XML",
+					"viewPath": "mm.apps.assignment.view",
+					"viewLevel": 2,
+					"clearAggregation": false,
+					"controlAggregation": "detailPages",
+					"transition": "slide"
+				},
+				"booking": {
+					"viewId": "booking",
+					"viewName": "Booking",
+					"viewType": "XML",
+					"viewPath": "mm.apps.booking.view",
+					"viewLevel": 2,
+					"clearAggregation": false,
+					"controlAggregation": "detailPages",
+					"transition": "slide"
+				},
+				"users": {
+					"viewId": "user",
+					"viewName": "user",
+					"viewType": "XML",
+					"viewPath": "mm.apps.users.view",
+					"viewLevel": 2,
+					"clearAggregation": false,
+					"controlAggregation": "detailPages",
+					"transition": "slide"
+				},
+				"user": {
+					"viewType": "XML",
+					"viewPath": "mm.apps.users.view",
+					"viewName": "UserInformation",
+					"viewLevel" : 3
+				},
+				"vehicles": {
+					"viewId": "vehicle",
+					"viewName": "vehicle",
+					"viewType": "XML",
+					"viewPath": "mm.apps.vehicles.view",
+					"viewLevel": 2,
+					"clearAggregation": false,
+					"controlAggregation": "detailPages",
+					"transition": "slide"
+				},
+				"vehicle": {
+					"viewType": "XML",
+					"viewPath": "mm.apps.vehicles.view",
+					"viewName": "VehicleInformation",
+					"viewLevel" : 3
+				},
+				"newVehicle": {
+					"viewType": "XML",
+					"viewPath": "mm.apps.manageVehicles.view",
+					"viewName": "manageVehicle",
+					"viewLevel" : 3
+				},
+				"profile": {
+					"viewType": "XML",
+					"viewPath": "mm.apps.profile.view",
+					"viewName": "Profile",
+					"viewLevel" : 3
+				}
+			}
+		},
+		"resources": {
+			"css": [{
+				"uri": "css/style.css"
+			}]
+		}
+	}
+}

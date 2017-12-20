@@ -1,0 +1,49 @@
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" 
+    controllerName="mm.apps.users.controller.User"
+	xmlns:html="http://www.w3.org/1999/xhtml">
+	<App>
+		<pages>
+			<Page id="userListPage" title="{i18n>UserList}"
+            	class="sapUiResponsiveContentPadding">
+				<headerContent>
+					<Button icon="sap-icon://home" tooltip="Go to Launchpad" press="returnToLaunchpad"/>
+				</headerContent>
+				<content>
+					<PullToRefresh
+						id="pullToRefresh"
+						refresh="handleRefresh" />
+					<List id="userList" headerText="{i18n>ListOfAllUsers}" 
+						items="{
+							path: '/Users',
+							sorter: {
+								path: 'username'
+							}
+						}">
+						<headerToolbar>
+							<Toolbar>
+								<Title
+										id="tableHeader"
+										text="{i18n>ListOfAllUsers}"/>
+								<ToolbarSpacer/>
+								<SearchField
+										id="searchField"
+										search="onSearch"
+										tooltip="{Search drivers}"
+										width="55%"/>
+							</Toolbar>
+						</headerToolbar>
+                        <items>
+                            <StandardListItem
+                                description="{firstname} {lastname}"
+								title="{username}"
+                                iconDensityAware="false"
+                                iconInset="false"
+                                type="Navigation"
+                                press="onListItemPressed"/>
+                        </items>
+                    </List>
+				</content>
+			</Page>
+		</pages>
+	</App>
+</mvc:View>

@@ -1,0 +1,51 @@
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" 
+    controllerName="mm.apps.vehicles.controller.Vehicle"
+	xmlns:html="http://www.w3.org/1999/xhtml">
+	<App>
+		<pages>
+			<Page id="vehicleListPage"  title="{i18n>VehicleList}"
+            
+            class="sapUiResponsiveContentPadding"
+            >
+				<headerContent>
+					<Button icon="sap-icon://home" tooltip="Go to Launchpad" press="returnToLaunchpad"/>
+				</headerContent>
+				<content>
+					<PullToRefresh
+						id="pullToRefresh"
+						refresh="handleRefresh" />
+					<List id="vehicleList" headerText="{i18n>ListOfAllVehicles}" 
+						items="{
+							path: '/Vehicles',
+							sorter: {
+								path: 'plateNo'
+							}
+						}">
+						<headerToolbar>
+							<Toolbar>
+								<Title
+										id="tableHeaderVehicle"
+										text="{i18n>ListOfAllVehicles}"/>
+								<ToolbarSpacer/>
+								<SearchField
+										id="searchFieldVehicle"
+										search="onSearchVehicle"
+										tooltip="{Search vehicles}"
+										width="50%"/>
+							</Toolbar>
+						</headerToolbar>
+                        <items>
+                            <StandardListItem
+                                title="{plateNo}"
+								description="{manufacturer} {model} {manufacturerYear}"
+                                iconDensityAware="false"
+                                iconInset="false"
+                                type="Navigation"
+                                press="onListItemPressed"/>
+                        </items>
+                    </List>
+				</content>
+			</Page>
+		</pages>
+	</App>
+</mvc:View>

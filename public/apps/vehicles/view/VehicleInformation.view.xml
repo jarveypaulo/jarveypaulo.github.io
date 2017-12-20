@@ -1,0 +1,52 @@
+<mvc:View
+	controllerName="mm.apps.vehicles.controller.VehicleInformation"
+	xmlns="sap.m"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:f="sap.ui.layout.form"
+	busyIndicatorDelay="0">
+	<Page
+		id="vehiclePage"
+		title="{i18n>VehicleDetailsOf}"
+		showNavButton="true"
+		navButtonPress="onNavBack"
+		class="sapUiResponsiveContentPadding">
+		<content>
+			<Panel
+				id="vehiclePanel"
+				width="auto"
+				class="sapUiResponsiveMargin sapUiNoContentPadding">
+				<headerToolbar>
+					<Toolbar>
+						<Title text="{i18n>VehicleIDColon} {plateNo}" level="H2"/>
+						<ToolbarSpacer />
+						<!-- <Link text="{i18n>FlipToResume}" tooltip="{i18n>FlipToResume.tooltip}" press="onShowResume" /> -->
+					</Toolbar>
+				</headerToolbar>
+				<content>
+					<f:SimpleForm id="simpleFormVehicleInformation"
+						editable="false"
+						layout="ResponsiveGridLayout"
+						labelSpanL="3" labelSpanM="3" emptySpanL="4" emptySpanM="4"
+						columnsL="2" columnsM="2">
+						<f:content>
+							<Label text="{i18n>vehicleType}" />
+							<Text text="{vehicleType}" />
+							<Label text="{i18n>manufacturer}" />
+							<Text text="{manufacturer}" />
+							<Label text="{i18n>model}" />
+							<Text text="{model}" />
+							<Label text="{i18n>color}" />
+							<Text text="{color}" />
+							<Label text="{i18n>manufacturerYear}" />
+							<Text text="{manufacturerYear}" />
+							<Label text="{i18n>engineNo}" />
+							<Text text="{engineNo}" />
+							<Label text="{i18n>chassisNo}" />
+							<Text text="{chassisNo}" />
+						</f:content>
+					</f:SimpleForm>
+				</content>
+			</Panel>
+		</content>
+	</Page>
+</mvc:View>
