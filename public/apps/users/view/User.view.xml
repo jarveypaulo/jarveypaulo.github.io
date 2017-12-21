@@ -34,8 +34,8 @@
 						</headerToolbar>
                         <items>
                             <StandardListItem
-                                description="{firstname} {lastname}"
-								title="{username}"
+                                title="{firstname} {lastname}"
+								description="{username}"
                                 iconDensityAware="false"
                                 iconInset="false"
                                 type="Navigation"
