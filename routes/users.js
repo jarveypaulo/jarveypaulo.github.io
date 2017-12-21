@@ -72,28 +72,26 @@ router.post('/authenticate', (req, res, next) => {
 // Profile
 // any route that needs to be protectd must put authenticate as 2nd parameter
 router.get('/profile', passport.authenticate('jwt', { session: false }), (req, res, next) => {
-    // res.json({ user: req.user });
     res.json(req.user);
 });
 
-// router.post('/profile', passport.authenticate('jwt', { session: false }), (req, res, next) => {
-//     // using req.body, you get what's passed from page
-//     let newUserDetails = new UserDetails({
-//         employeeID: req.user.employeeID,
-//         lastname: req.body.lastname,
-//         firstname: req.body.firstname,
-//         mobile: req.body.mobile,
-//         homephone: req.body.homephone
-//     });
+router.put('/changepassword', passport.authenticate('jwt', { session: false }), (req, res, next) => {
+    let query = {
+        username: req.user.username
+    }
 
-//     UserDetails.addUserDetails(newUserDetails, (err, user) => {
-//         if (err){
-//             res.json({success: false, msg:'Failed to register user details'});
-//         } else {
-//             res.json({success: true, msg: 'User details registered successfully'});
-//         }
-//     });
-// });
+    let updatedUser = {
+        password: req.body.password
+    }
+
+    User.updatePassword(query, updatedUser, (err, user) => {
+        if (err){
+            res.json({success: false, msg:'Failed to change user password.'});
+        } else {
+            res.json({success: true, msg: 'User password changed successfully'});
+        }
+    });
+});
 
 // Drivers List
 router.get('/drivers/list', passport.authenticate('jwt', { session: false }), 

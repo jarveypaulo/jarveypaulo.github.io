@@ -88,6 +88,10 @@
 				"pattern": "",
 				"target": "login"
 			}, {
+				"name": "login_cp",
+				"pattern": "fleet/mm/apps/changepassword",
+				"target": "login_cp"
+			}, {
 				"name": "assignment",
 				"pattern": "fleet/mm/apps/assignment",
 				"target": "assignment"
@@ -144,12 +148,20 @@
 					"viewLevel": 1,
 					"transition": "show"
 				},
+				"login_cp": {
+					"viewId": "login_cp",
+					"viewName": "Login_cp",
+					"viewType": "XML",
+					"viewPath": "mm.apps.login_cp.view",
+					"viewLevel": 1,
+					"transition": "show"
+				},
 				"launchpad": {
 					"viewId": "launchpad",
 					"viewName": "launchpad",
 					"viewType": "JS",
 					"viewLevel": 2,
-					"transition": "flip"
+					"transition": "show"
 				},
 				"assignment": {
 					"viewId": "assignment",

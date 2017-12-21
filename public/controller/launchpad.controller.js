@@ -44,6 +44,7 @@ sap.ui.define([
 			// window.localStorage.removeItem("token");
 			window.localStorage.clear();
 			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+			location.reload();
 			oRouter.navTo("login");
 
 		},

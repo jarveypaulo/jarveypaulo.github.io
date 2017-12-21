@@ -20,6 +20,25 @@ router.get('/list', passport.authenticate('jwt', { session: false }), (req, res,
 // Add New Bookings
 router.post('/add', passport.authenticate('jwt', { session: false }), (req, res, next) => {    
     Bookings.getLastMileageOfVehicle(req.body.plateNo, function(err, result) {
+        if(!result){
+            let newBookings = new Bookings({
+                username: req.body.username,
+                plateNo: req.body.plateNo,
+                bookedDate: req.body.bookedDate,
+                releasedDate: req.body.releasedDate,
+                mileageStart: req.body.mileageStart,
+                mileageEnd: req.body.mileageEnd
+            });
+
+            Bookings.addBookings(newBookings, (err, booking) => {
+                if (err){
+                    res.json({success: false, msg:'Failed to ride the vehicle'});
+                } else {
+                    res.json({success: true, msg: 'Vehicle ridden successfully'});
+                }
+            });
+            return;
+        }
         if(req.body.mileageStart < result.mileageEnd){
             res.json({
                 success: false, 

@@ -15,7 +15,7 @@ sap.ui.define([
 			// sap.ui.core.Control.setVisible(false);
 		},
 
-		onLogin: function() {
+		onLogin: function(sIsChangePassword) {
 			let sUsername = new String,
 				sPassword = this.byId('passwordInput').getValue();
 			
@@ -52,22 +52,6 @@ sap.ui.define([
 			// convert username to capital
 			sUsername = sUsername.toUpperCase();
 
-			// check if user already logged in using JWT
-			// if (window.localStorage.token){
-			// 	$.ajax({
-			// 		url: "./api/users/profile"
-			// 	})
-			// 	.fail(function(){
-			// 		MessageToast.show("Error connecting to the Server");
-			// 	})
-			// 	.done(function(data, status, jqXHR){
-			// 		// load data from URL
-			// 		oNewVehicleModel.setData(data);
-			// 		sap.ui.getCore().setModel(oNewVehicleModel, "loggedAccountModel");
-			// 		oView.getView().setModel(oNewVehicleModel);
-			// 	});
-			// }
-
 			var formData = {
 				username: sUsername,
 				password: sPassword
@@ -90,12 +74,17 @@ sap.ui.define([
 			.done(function(data,s,o){
 				if (data.success === true) {
 					window.localStorage.token = data.token;
-					// window.localStorage.username = data.user.username;
-					MessageToast.show("You are now successfully logged in.");
 					var oModel = new JSONModel();
 					oModel.setData(data.user);
 					sap.ui.getCore().setModel(oModel, "loggedAccount");
-					oRouter.navTo("launchpad");
+					if (sIsChangePassword === 'true'){
+						oRouter.navTo("login_cp");
+					} else {
+						
+						MessageToast.show("You are now successfully logged in.");
+						oRouter.navTo("launchpad");
+					}
+					
 				} else if(data.success === false) {
 					oMessageText.setText(data.msg);
 					oDialog.insertContent(oMessageText);
@@ -106,7 +95,7 @@ sap.ui.define([
 		},
 
 		onChangePassword: function () {
-
+			this.onLogin('true');
 		}
 	});
 });

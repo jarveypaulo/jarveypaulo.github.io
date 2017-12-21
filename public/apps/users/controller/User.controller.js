@@ -125,7 +125,9 @@ sap.ui.define([
 			var sQuery = oSearchField.getValue();
 			var aFilters = [];
 			if (sQuery && sQuery.length) {
-				aFilters.push(new Filter("username", sap.ui.model.FilterOperator.Contains, sQuery));
+				// aFilters.push(new Filter("username", sap.ui.model.FilterOperator.Contains, sQuery));
+				aFilters.push(new Filter("firstname", sap.ui.model.FilterOperator.Contains, sQuery));
+				// aFilters.push(new Filter("lastname", sap.ui.model.FilterOperator.Contains, sQuery));
 			}
 			oList.getBinding("items").filter(aFilters);
 		}

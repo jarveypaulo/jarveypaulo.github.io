@@ -11,14 +11,14 @@ sap.ui.define([
     
 	return BaseController.extend("mm.apps.login_cp.controller.Login_cp", {
 		onInit: function() {
-			var oButton = this.byId('idAppControl');
+			// var oButton = this.byId('idAppControl');
 
 			
 		},
 
-		onChangePassword: function() {
-			let sUsername = this.byId('usernameInput').getValue(),
-				sPassword = this.byId('passwordInput').getValue();
+		onSavePassword: function() {
+			let sPassword = this.byId('idNewPassword').getValue(),
+				sPassword2 = this.byId('idNewPassword2').getValue();
 
 			let oDialog = new Dialog({
 				title: 'Error',
@@ -37,38 +37,67 @@ sap.ui.define([
 
 			let oMessageText = new Text();
 
-			if (sUsername==="") {
-				oMessageText.setText("Username is empty");
+			if (sPassword === "") {
+				oMessageText.setText("New password is empty.");
 				oDialog.insertContent(oMessageText);
 				oDialog.open();
 				return;
-			} else if (sPassword==="") {
-				oMessageText.setText("Password is empty");
+			} else if (sPassword2 === "") {
+				oMessageText.setText("The retyped password is empty.");
 				oDialog.insertContent(oMessageText);
 				oDialog.open();
 				return;
 			}
-
+			if(sPassword.length < 8){
+				oMessageText.setText("Your password must be at least 8 characters.");
+				oDialog.insertContent(oMessageText);
+				oDialog.open();
+				return;
+			}
+			if(sPassword.search(/[a-z]/i) < 0){
+				oMessageText.setText("Your password must contain at least one letter.");
+				oDialog.insertContent(oMessageText);
+				oDialog.open();
+				return;
+			}
+			if(sPassword.search(/[0-9]/) < 0){
+				oMessageText.setText("Your password must contain at least one digit.");
+				oDialog.insertContent(oMessageText);
+				oDialog.open();
+				return;
+			}
+			// passwords should be same
+			if(sPassword != sPassword2){
+				oMessageText.setText("The retyped password does not match the new password.");
+				oDialog.insertContent(oMessageText);
+				oDialog.open();
+				return;
+			}
 			var formData = {
-				username: sUsername,
-				password: sPassword
+				password: sPassword2
 			};
-
 			formData = JSON.stringify(formData);
 			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 			$.ajax({
-				url:"./api/users/authenticate",
-				type:"POST",
+				url:"./api/users/changepassword",
+				type:"PUT",
 				data:formData,
 				contentType:"application/json",
+				headers: {
+					Authorization: window.localStorage.token
+				},
 				// beforeSend:function(e){e.setRequestHeader("X-CSRF-Token","Fetch")},
 				success:function(data,s,o){
 					if (data.success === true) {
-						MessageToast.show("You are now successfully logged in.");
-						var oModel = new JSONModel();
-						oModel.setData(data);
-						sap.ui.getCore().setModel(oModel, "loggedAccount");
-						oRouter.navTo("launchpad");
+						MessageToast.show("You are now successfully changed your password");
+
+						var oNewProfileModel = new JSONModel(); 
+						oNewProfileModel.setData("");
+						sap.ui.getCore().setModel(oNewProfileModel, "profileModel");
+						// remove jwt
+						window.localStorage.clear();
+						location.reload();
+						oRouter.navTo("login");
 					} else if(data.success === false) {
 						oMessageText.setText(data.msg);
 						oDialog.insertContent(oMessageText);
@@ -76,10 +105,6 @@ sap.ui.define([
 					}
 				}
 			});
-		},
-
-		onChangePassword: function () {
-
 		}
 	});
 });

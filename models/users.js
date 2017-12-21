@@ -87,3 +87,15 @@ module.exports.comparePassword = function(candidatePassword, hash, callback) {
         callback(null, isMatch);
     });
 }
+
+// Function to update Bookings to db
+module.exports.updatePassword = function(query, updatedUser, callback) {
+    bcrypt.genSalt(10, (err, salt) => {
+        bcrypt.hash(updatedUser.password, salt, (err, hash) => {
+            if (err) throw err;
+            updatedUser.password = hash;
+            // newUser.save(callback);
+            User.update(query, updatedUser, callback);
+        });
+    })
+}
