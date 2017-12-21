@@ -40,9 +40,9 @@ sap.ui.define([
 				let oView = this;
 				if (oProfileModel != null) {
 
-					if(oProfileModel.oData.account_type === 'driver'){
-						oFooterToolbar.setVisible(false);
-						oTable.setMode('None');
+					if(oProfileModel.oData.account_type === 'admin'){
+						oFooterToolbar.setVisible(true);
+						oTable.setMode('MultiSelect');
 					}
 				}
 				else {
@@ -67,9 +67,9 @@ sap.ui.define([
 						sap.ui.getCore().setModel(oNewProfileModel, "profileModel");
 						// oView.getView().setModel(oNewProfileModel);
 
-						if(data.account_type === 'driver'){
-							oFooterToolbar.setVisible(false);
-							oTable.setMode('None');
+						if(data.account_type === 'admin'){
+							oFooterToolbar.setVisible(true);
+							oTable.setMode('MultiSelect');
 						}
 					});
 				}

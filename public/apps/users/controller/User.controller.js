@@ -3,12 +3,31 @@ sap.ui.define([
 	"sap/ui/model/json/JSONModel",
 	"sap/ui/core/UIComponent",
 	'sap/m/MessageToast',
-	'sap/ui/model/Filter'
-], function(BaseController, JSONModel, UIComponent, MessageToast, Filter) {
+	'sap/ui/model/Filter',
+	'sap/m/Button',
+	'sap/m/Dialog',
+	'sap/m/Text'
+], function(BaseController, JSONModel, UIComponent, MessageToast, Filter, Button, Dialog, Text) {
 	"use strict";
 
 	return BaseController.extend("mm.apps.users.controller.User", {
 		onInit: function() {
+			let oMessageText = new Text();
+			let oDialog = new Dialog({
+				title: 'Error',
+				type: 'Message',
+				state: 'Error',
+				beginButton: new Button({
+					text: 'OK',
+					press: function () {
+						oDialog.close();
+					}
+				}),
+				afterClose: function() {
+					oDialog.destroy();
+				}
+			});
+
 			let oView = this;
 			let oUserModel = sap.ui.getCore().getModel("userModel");
 			if (oUserModel != null) {
@@ -24,7 +43,11 @@ sap.ui.define([
 					}
 				})
 				.fail(function(){
-					MessageToast.show("Error connecting to the Server");
+					// MessageToast.show("Error connecting to the Server");
+					oMessageText.setText("Error connecting to the Server.");
+					oDialog.insertContent(oMessageText);
+					oDialog.open();
+					return;
 				})
 				.done(function(data, status, jqXHR){
 					// load data from URL
@@ -54,6 +77,22 @@ sap.ui.define([
 		},
 
 		handleRefresh : function (){
+			let oMessageText = new Text();
+			let oDialog = new Dialog({
+				title: 'Error',
+				type: 'Message',
+				state: 'Error',
+				beginButton: new Button({
+					text: 'OK',
+					press: function () {
+						oDialog.close();
+					}
+				}),
+				afterClose: function() {
+					oDialog.destroy();
+				}
+			});
+
 			setTimeout(function () {
 				this.byId("pullToRefresh").hide();
 				let oView = this;
@@ -65,7 +104,11 @@ sap.ui.define([
 					}
 				})
 				.fail(function(){
-					MessageToast.show("Error connecting to the Server");
+					// MessageToast.show("Error connecting to the Server");
+					oMessageText.setText("Error connecting to the Server.");
+					oDialog.insertContent(oMessageText);
+					oDialog.open();
+					return;
 				})
 				.done(function(data, status, jqXHR){
 					// load data from URL

@@ -22,7 +22,7 @@
 						noDataText="{worklistView>/tableNoDataText}"
 						updateFinished="onUpdateFinished"
 						width="auto"
-						mode="MultiSelect"
+						mode="None"
 						items="{
 							path: '/Assignments',
 							sorter: {
@@ -82,12 +82,12 @@
 					</Table>
 				</content>
 				<footer>
-					<Toolbar  id="idFooterToolbar" >
+					<Toolbar  id="idFooterToolbar"   visible="false"  >
 						<ToolbarSpacer/>
 						<Button id="btnAddAssignmentId" type="Accept" text="New"  icon="sap-icon://create-form" 
-							press="onAddAssignment"  enabled="true" />
+							press="onAddAssignment" />
 						<Button id="btnRemoveAssignmentId" type="Reject" text="Remove"  icon="sap-icon://delete" 
-							press="onRemoveAssignment" enabled="true"/>
+							press="onRemoveAssignment" />
 					</Toolbar>
 				</footer>
 			</Page>
