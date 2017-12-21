@@ -43,6 +43,8 @@
 							<Text text="{engineNo}" />
 							<Label text="{i18n>chassisNo}" />
 							<Text text="{chassisNo}" />
+							<Label text="{i18n>mileage}" />
+							<Text text="{mileage}" />
 						</f:content>
 					</f:SimpleForm>
 				</content>

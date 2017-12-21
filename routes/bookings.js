@@ -4,6 +4,7 @@ const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const config = require('../config/database');
 const Bookings = require('../models/bookings');
+const Vehicle = require('../models/vehicles');
 
 // All Bookings
 // any route that needs to be protectd must put authenticate as 2nd parameter
@@ -19,30 +20,11 @@ router.get('/list', passport.authenticate('jwt', { session: false }), (req, res,
 
 // Add New Bookings
 router.post('/add', passport.authenticate('jwt', { session: false }), (req, res, next) => {    
-    Bookings.getLastMileageOfVehicle(req.body.plateNo, function(err, result) {
-        if(!result){
-            let newBookings = new Bookings({
-                username: req.body.username,
-                plateNo: req.body.plateNo,
-                bookedDate: req.body.bookedDate,
-                releasedDate: req.body.releasedDate,
-                mileageStart: req.body.mileageStart,
-                mileageEnd: req.body.mileageEnd
-            });
-
-            Bookings.addBookings(newBookings, (err, booking) => {
-                if (err){
-                    res.json({success: false, msg:'Failed to ride the vehicle'});
-                } else {
-                    res.json({success: true, msg: 'Vehicle ridden successfully'});
-                }
-            });
-            return;
-        }
-        if(req.body.mileageStart < result.mileageEnd){
+    Vehicle.getVehicleByplateNo(req.body.plateNo, function(err, vehicle) {
+        if(req.body.mileageStart < vehicle.mileage){
             res.json({
                 success: false, 
-                msg:'Last recorded mileage is '+result.mileageEnd+'. New mileage must be same or greater than this.'
+                msg:'Last recorded mileage is '+vehicle.mileage+'. New mileage must be same or greater than this.'
             });
         } else {
             // check open booking for that Vehicle
@@ -77,6 +59,66 @@ router.post('/add', passport.authenticate('jwt', { session: false }), (req, res,
             })            
         }
     });
+
+
+    // Bookings.getLastMileageOfVehicle(req.body.plateNo, function(err, result) {
+    //     if(!result){
+    //         let newBookings = new Bookings({
+    //             username: req.body.username,
+    //             plateNo: req.body.plateNo,
+    //             bookedDate: req.body.bookedDate,
+    //             releasedDate: req.body.releasedDate,
+    //             mileageStart: req.body.mileageStart,
+    //             mileageEnd: req.body.mileageEnd
+    //         });
+
+    //         Bookings.addBookings(newBookings, (err, booking) => {
+    //             if (err){
+    //                 res.json({success: false, msg:'Failed to ride the vehicle'});
+    //             } else {
+    //                 res.json({success: true, msg: 'Vehicle ridden successfully'});
+    //             }
+    //         });
+    //         return;
+    //     }
+    //     if(req.body.mileageStart < result.mileageEnd){
+    //         res.json({
+    //             success: false, 
+    //             msg:'Last recorded mileage is '+result.mileageEnd+'. New mileage must be same or greater than this.'
+    //         });
+    //     } else {
+    //         // check open booking for that Vehicle
+    //         let query = {
+    //             plateNo: req.body.plateNo,
+    //             releasedDate: ""
+    //         }
+    //         Bookings.openBookingVehicle(query, (err, booking) => {
+    //             if (booking) {
+    //                 res.json({
+    //                     success: false, 
+    //                     msg:'Vehicle '+booking.plateNo+' is being driven by '+booking.username+'. Wait until it is parked.'
+    //                 });
+    //             } else {
+    //                 let newBookings = new Bookings({
+    //                     username: req.body.username,
+    //                     plateNo: req.body.plateNo,
+    //                     bookedDate: req.body.bookedDate,
+    //                     releasedDate: req.body.releasedDate,
+    //                     mileageStart: req.body.mileageStart,
+    //                     mileageEnd: req.body.mileageEnd
+    //                 });
+        
+    //                 Bookings.addBookings(newBookings, (err, booking) => {
+    //                     if (err){
+    //                         res.json({success: false, msg:'Failed to ride the vehicle'});
+    //                     } else {
+    //                         res.json({success: true, msg: 'Vehicle ridden successfully'});
+    //                     }
+    //                 });
+    //             }
+    //         })            
+    //     }
+    // });
 });
 
 // Update Bookings
@@ -97,7 +139,19 @@ router.put('/add', passport.authenticate('jwt', { session: false }), (req, res, 
         if (err){
             res.json({success: false, msg:'Failed to update vehicle ride details'});
         } else {
-            res.json({success: true, msg: 'Vehicle ride successfully updated'});
+            // save the last mileage to the vehicle's mileage master data
+            let queryVehicle = {
+                plateNo: req.body.plateNo
+            }
+            let updatedVehicle = {};
+            updatedVehicle.mileage = req.body.mileageEnd;
+            Vehicle.updateVehicle(queryVehicle, updatedVehicle, (err, vehicle) => {
+                if (err){
+                    res.json({success: false, msg: 'Failed to update vehicle ride details'});
+                } else {
+                    res.json({success: true, msg: 'Vehicle ride successfully updated'});
+                }
+            });
         }
     });
 });

@@ -4,23 +4,19 @@ const config = require('../config/database');
 // Bookings Schema
 const BookingsSchema = mongoose.Schema({
     username: {
-        type: String,
-        unique: true
+        type: String
     },
     plateNo: {
-        type: String,
-        unique: true
+        type: String
     },
     bookedDate: {
-        type: String,
-        unique: true
+        type: String
     },
     releasedDate: {
         type: String
     },
     mileageStart: {
-        type: Number,
-        unique: true
+        type: Number
     },
     mileageEnd: {
         type: Number

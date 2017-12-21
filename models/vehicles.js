@@ -28,6 +28,9 @@ const VehicleSchema = mongoose.Schema({
     },
     chassisNo: {
         type: String 
+    },
+    mileage: {
+        type: Number
     }
 });
 
@@ -50,4 +53,9 @@ module.exports.getVehicleAll = function(callback) {
 // Function to add Vehicle to db
 module.exports.addVehicle = function(newVehicle, callback) {
     newVehicle.save(callback);
+}
+
+// Function to update Vehicle to db
+module.exports.updateVehicle = function(query, updatedVehicle, callback) {
+    Vehicle.update(query, updatedVehicle, callback);
 }

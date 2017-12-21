@@ -28,7 +28,8 @@ router.post('/add', passport.authenticate('jwt', { session: false }),  (req, res
         color: req.body.color,
         manufacturerYear: req.body.manufacturerYear,
         engineNo: req.body.engineNo,
-        chassisNo: req.body.chassisNo
+        chassisNo: req.body.chassisNo,
+        mileage: req.body.mileage
     });
 
     Vehicle.addVehicle(newVehicle, (err, vehicle) => {

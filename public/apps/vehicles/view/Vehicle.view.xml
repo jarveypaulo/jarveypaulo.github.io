@@ -40,6 +40,7 @@
 								description="{manufacturer} {model} {manufacturerYear}"
                                 iconDensityAware="false"
                                 iconInset="false"
+								info="Mileage: {mileage}" 
                                 type="Navigation"
                                 press="onListItemPressed"/>
                         </items>
