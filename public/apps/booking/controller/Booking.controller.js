@@ -11,22 +11,7 @@ sap.ui.define([
 	"use strict";
 	return BaseController.extend("mm.apps.booking.controller.Booking", {
 		onInit: function() {
-			let oMessageText = new Text();
-			let oDialog = new Dialog({
-				title: 'Error',
-				type: 'Message',
-				state: 'Error',
-				beginButton: new Button({
-					text: 'OK',
-					press: function () {
-						oDialog.close();
-					}
-				}),
-				afterClose: function() {
-					oDialog.destroy();
-				}
-			});
-
+			let oView = this;
 			// Get username
 			let sUsername = new String;
 			if (window.localStorage.token){
@@ -45,7 +30,8 @@ sap.ui.define([
 						async: false
 					})
 					.fail(function(){
-						MessageToast.show("Error connecting to the Server");
+						oView.issueMessage('Error connecting to the server');
+						return;
 					})
 					.done(function(data, status, jqXHR){
 						// load data from URL
@@ -56,22 +42,12 @@ sap.ui.define([
 				}
 			}
 
-			// // No assigned vehicle
-			// if (!sPlateNo){
-			// 	oMessageText.setText("No assigned vehicle.");
-			// 	oDialog.insertContent(oMessageText);
-			// 	oDialog.open();
-			// 	return;
-			// }
-
-
 			window.localStorage.username = sUsername;
 
 			var oUsername = {username: sUsername};
 			oUsername = JSON.stringify(oUsername);
 			let oInputVehicle = this.byId('assignedVehicle_id');
 			// Get reference of the current view
-			let oView = this;
 			$.ajax({
 				url:"./api/assignment/user",
 				type:"POST",
@@ -82,16 +58,12 @@ sap.ui.define([
 				}
 			})
 			.fail(function(){
-				oMessageText.setText("Error connecting to the server");
-				oDialog.insertContent(oMessageText);
-				oDialog.open();
+				oView.issueMessage('Error connecting to the server');
+				return;
 			})
 			.done(function(data,s,o){
 				if (data) {
-					
 					// Set value to the assigned vehicle
-					// oInputVehicle.setValue(data.assignments.plateNo);
-
 					var oModel = new JSONModel();
 					let oPlateNo = {
 						assignment: {
@@ -107,23 +79,11 @@ sap.ui.define([
 				}
 			});
 
-			// Set initial value to zero
-			// this.byId('startingMileage_id').setValue(0);
-
-
-			// Check for open booking
-			// var oOpenBooking = {
-			// 	username: window.localStorage.username,
-			// 	plateNo: oInputVehicle.getValue()
-			// };
-			// oOpenBooking = JSON.stringify(oOpenBooking);		
-			
 			let oInputBookedDate = this.byId('bookedDate_id'),
 				oInpStartMileage = this.byId('startingMileage_id'),
 				oInpEndMileage = this.byId('endingMileage_id'),
 				oBtnBook = this.byId('btnBookId'),
 				oBtnRelease = this.byId('btnReleaseId');
-				// oBtnChangeVehicle = this.byId('btnChangeVehicleId');
 			$.ajax({
 				url:"./api/bookings/open",
 				type:"GET",
@@ -134,9 +94,8 @@ sap.ui.define([
 				}
 			})
 			.fail(function(){
-				oMessageText.setText("Error connecting to the server");
-				oDialog.insertContent(oMessageText);
-				oDialog.open();
+				oView.issueMessage('Error connecting to the server');
+				return;
 			})
 			.done(function(data,s,o){
 				if (data.Bookings.length > 0) {
@@ -148,7 +107,6 @@ sap.ui.define([
 						}
 					}
 					if(result != null){
-						// oInputBookedDate.setValue(result.bookedDate);
 						oInputBookedDate.setValue(oView.formatDate(result.bookedDate));
 						oInpStartMileage.setValue(result.mileageStart);
 
@@ -156,7 +114,6 @@ sap.ui.define([
 						oInpEndMileage.setEditable(true).setRequired(true);
 						oBtnBook.setEnabled(false);
 						oBtnRelease.setEnabled(true);
-						// oBtnChangeVehicle.setVisible(false);
 					}
 					result = null;
 				} else {
@@ -165,14 +122,9 @@ sap.ui.define([
 			});
 
 		},
-		
-		onBeforeRendering : function () {
-
-		},
-        
+		        
 		returnToLaunchpad: function(oEvent) {
 			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-			// this.destroy();
 			oRouter.navTo("launchpad");
 		},
 
@@ -180,42 +132,18 @@ sap.ui.define([
 			let sPlateNo = this.byId('assignedVehicle_id').getValue(),
 				nStartingMileage = this.byId('startingMileage_id').getValue(),
 				nEndingMileage   = this.byId('endingMileage_id').getValue();
-
-			let oMessageText = new Text();
-			let oDialog = new Dialog({
-				title: 'Error',
-				type: 'Message',
-				state: 'Error',
-				beginButton: new Button({
-					text: 'OK',
-					press: function () {
-						oDialog.close();
-					}
-				}),
-				afterClose: function() {
-					oDialog.destroy();
-				}
-			});
+			let oView = this;
 			// No assigned vehicle
 			if (!sPlateNo){
-				oMessageText.setText("No assigned vehicle.");
-				oDialog.insertContent(oMessageText);
-				oDialog.open();
+				oView.issueMessage('No assigned vehicle. Please contact system administrator.');
 				return;
 			}
 
 			// Starting Mileage is required
 			if (!nStartingMileage) {
-				oMessageText.setText("Please input the starting mileage.");
-				oDialog.insertContent(oMessageText);
-				oDialog.open();
+				oView.issueMessage('Please input the starting mileage');
 				return;
 			}
-			// DD-MM-YYYY HH:MM
-			// var d = new Date();
-			// var sBookDate = ("0" + d.getDate()).slice(-2) + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" +
-			// 	d.getFullYear() + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
-			// Set Booked Date
 			let oInputBookedDate = this.byId('bookedDate_id');
 			
 			// Get reference of UI elem
@@ -223,21 +151,16 @@ sap.ui.define([
 				oInpEndMileage = this.byId('endingMileage_id'),
 				oBtnBook = this.byId('btnBookId'),
 				oBtnRelease = this.byId('btnReleaseId');
-				// oBtnChangeVehicle = this.byId('btnChangeVehicleId');
 
 			// SAVE the new booking
 			var dBookedDate = Date.now();
 			var oBookings = {
 				username: window.localStorage.username,
-				plateNo: sPlateNo, // this.byId('assignedVehicle_id').getValue(),
-				// bookedDate: sBookDate,
+				plateNo: sPlateNo, 
 				bookedDate: dBookedDate,
 				mileageStart: this.byId('startingMileage_id').getValue()
-				// releasedDate: "",
-				// mileageEnd: ""
 			};
 			oBookings = JSON.stringify(oBookings);
-			let oView = this;
 			$.ajax({
 				url:"./api/bookings/add",
 				type:"POST",
@@ -248,26 +171,21 @@ sap.ui.define([
 				}
 			})
 			.fail(function(){
-				oMessageText.setText("Error connecting to the server");
-				oDialog.insertContent(oMessageText);
-				oDialog.open();
+				oView.issueMessage('Error connecting to the server');
+				return;
 			})
 			.done(function(data,s,o){
 				if (data.success === true) {
-					MessageToast.show("Booking is successful!");
+					MessageToast.show("Riding the vehicle is successful!");
 
-					// oInputBookedDate.setValue(sBookDate);
 					dBookedDate = oView.formatDate(dBookedDate);
 					oInputBookedDate.setValue(dBookedDate);
 					oInpStartMileage.setEditable(false).setRequired(false);
 					oInpEndMileage.setEditable(true).setRequired(true);
 					oBtnBook.setEnabled(false);
 					oBtnRelease.setEnabled(true);
-					// oBtnChangeVehicle.setVisible(false);
 				} else {
-					oMessageText.setText(data.msg);
-					oDialog.insertContent(oMessageText);
-					oDialog.open();
+					oView.issueMessage(data.msg);
 				}
 			});
 		},
@@ -321,6 +239,7 @@ sap.ui.define([
 			})
 			.fail(function(){
 				oView.issueMessage('Error connecting to the server');
+				return;
 			})
 			.done(function(data,s,o){
 				if (data.success === true) {
@@ -338,8 +257,8 @@ sap.ui.define([
 							oDialogSuccess.destroy();
 						}
 					});
-
-					oMessageText.setText("You have released vehicle "+sPlateNo+". This vehicle is now available for booking.");
+					let oMessageText = new Text();
+					oMessageText.setText("You have parked vehicle "+sPlateNo+". This vehicle is now available for riding.");
 					oDialogSuccess.insertContent(oMessageText);
 					oDialogSuccess.open();
 
@@ -350,9 +269,7 @@ sap.ui.define([
 					oBtnRelease.setEnabled(false);
 
 				} else {
-					oMessageText.setText(data.msg);
-					oDialog.insertContent(oMessageText);
-					oDialog.open();
+					oView.issueMessage(data.msg);
 				}
 			});
 
@@ -360,7 +277,7 @@ sap.ui.define([
 
 		formatDate : function(v){
 			jQuery.sap.require("sap.ui.core.format.DateFormat");
-			var oDateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern: "dd MMM YYYY"});
+			var oDateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern: "dd MMM YYYY hh:mm:ss a"});
 			return oDateFormat.format(new Date(v));	
 		},
 

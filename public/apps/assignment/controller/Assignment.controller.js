@@ -155,7 +155,7 @@ sap.ui.define([
 
 		formatDate : function(v){
 			jQuery.sap.require("sap.ui.core.format.DateFormat");
-			var oDateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern: "dd MMM YYYY"});
+			var oDateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern: "dd MMM YYYY hh:mm:ss a"});
 			return oDateFormat.format(new Date(v));	
 		},
 

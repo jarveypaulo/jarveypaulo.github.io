@@ -16,6 +16,15 @@
 			"routeName": "booking"
 		},
 		{
+			"header": "Vehicle Log",
+			"subheader": "Mileage Records",
+			"footer": "display mileage history",
+			"unitFooter": "",
+			"icon": "activity-items",
+			"iconMenu": "activity-items",
+			"routeName": "vehicleLog"
+		},
+		{
 			"header": "Vehicles",
 			"subheader": "Vehicle Information",
 			"icon": "car-rental",
@@ -31,15 +40,6 @@
 			"icon": "supplier",
 			"iconMenu": "supplier",
 			"routeName": "users"
-		},
-		{
-			"header": "Vehicle Log",
-			"subheader": "Mileage Records",
-			"footer": "display mileage history",
-			"unitFooter": "",
-			"icon": "activity-items",
-			"iconMenu": "activity-items",
-			"routeName": "vehicleLog"
 		}
 	]
 }
