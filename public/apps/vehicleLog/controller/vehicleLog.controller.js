@@ -6,11 +6,12 @@ sap.ui.define([
 	'sap/m/Button',
 	'sap/m/Dialog',
 	'sap/m/Text',
-	'sap/ui/model/Filter'
-], function(BaseController, JSONModel, UIComponent, MessageToast, Button, Dialog, Text, Filter) {
+	'sap/ui/model/Filter',
+    'sap/m/GroupHeaderListItem'
+], function(BaseController, JSONModel, UIComponent, MessageToast, Button, Dialog, Text, Filter, GroupHeaderListItem) {
 	"use strict";
 
-	return BaseController.extend("mm.apps.assignment.controller.Assignment", {
+	return BaseController.extend("mm.apps.vehicleLog.controller.vehicleLog", {
 		onInit: function() {
 			let oMessageText = new Text();
 			let oDialog = new Dialog({
@@ -34,7 +35,7 @@ sap.ui.define([
 
 			if (window.localStorage.token){
 				var oFooterToolbar = this.byId('idFooterToolbar');
-				var oTable = this.byId('tableAssignVehicleId');
+				var oTable = this.byId('tablevehicleLogId');
 
 				let oProfileModel = sap.ui.getCore().getModel("profileModel");
 				let oView = this;
@@ -55,7 +56,6 @@ sap.ui.define([
 						}
 					})
 					.fail(function(){
-						// MessageToast.show("Error connecting to the Server");
 						oMessageText.setText("Error connecting to the Server.");
 						oDialog.insertContent(oMessageText);
 						oDialog.open();
@@ -65,7 +65,6 @@ sap.ui.define([
 						// load data from URL
 						oNewProfileModel.setData(data);
 						sap.ui.getCore().setModel(oNewProfileModel, "profileModel");
-						// oView.getView().setModel(oNewProfileModel);
 
 						if(data.account_type === 'admin'){
 							oFooterToolbar.setVisible(true);
@@ -77,13 +76,12 @@ sap.ui.define([
 
 			// get assigned vehicle data
 			$.ajax({
-				url: "./api/assignment/list",
+				url: "./api/bookings/list",
 				headers: {
 					Authorization: window.localStorage.token
 				}
 			})
 			.fail(function(){
-				// MessageToast.show("Error connecting to the Server");
 				oMessageText.setText("Error connecting to the Server.");
 				oDialog.insertContent(oMessageText);
 				oDialog.open();
@@ -92,11 +90,19 @@ sap.ui.define([
 			.done(function(data, status, jqXHR){
 				// load data from URL
 				oModel.setData(data);
-				sap.ui.getCore().setModel(oModel, "assignVehicleModel");
-				oView.getView().setModel(oModel);
+				sap.ui.getCore().setModel(oModel, "bookingsModel");
+                oView.getView().setModel(oModel);
 			});
 		},
-		
+        
+        
+		getGroupHeader: function (oGroup){
+			return new GroupHeaderListItem( {
+				title: 'Plate No. ' + oGroup.key,
+				upperCase: false
+			} );
+        },
+        
 		onBeforeRendering : function () {
 
 		},
@@ -106,11 +112,7 @@ sap.ui.define([
 			oRouter.navTo("launchpad");
 		},
 
-		onAddAssignment: function(){
-			this.getRouter().navTo("newAssignment");
-		},
-
-		onRemoveAssignment: function(oEvent){
+		onRemoveVehicleLog: function(oEvent){
 			let oMessageText = new Text();
 			let oDialog = new Dialog({
 				title: 'Error',
@@ -128,14 +130,13 @@ sap.ui.define([
 			});
 
 			// Get index of the selection
-			var aContexts = this.byId("tableAssignVehicleId").getSelectedContexts();
+			var aContexts = this.byId("tablevehicleLogId").getSelectedContexts();
 			let sIndex = new Number;
 			var aUsername = [];
-			let oAssignVechicleModel = sap.ui.getCore().getModel("assignVehicleModel");
+			let oVehicleLogModel = sap.ui.getCore().getModel("bookingsModel");
 			for (var i = 0; i < aContexts.length; i++) { 
-				sIndex = aContexts[i].sPath.substr(13,1);
-				// let sUsername = oAssignVechicleModel.getData().Assignments[sIndex].username;
-				aUsername.push(oAssignVechicleModel.getData().Assignments[sIndex].username);
+				sIndex = aContexts[i].sPath.substr(10,1);
+				aUsername.push(oVehicleLogModel.getData().Bookings[sIndex].username);
 			}
 			var formData = {
 				username: aUsername,
@@ -151,7 +152,6 @@ sap.ui.define([
 				}
 			})
 			.fail(function(){
-				// MessageToast.show("Error connecting to the Server");
 				oMessageText.setText("Error connecting to the Server");
 				oDialog.insertContent(oMessageText);
 				oDialog.open();
@@ -161,7 +161,6 @@ sap.ui.define([
 				if (data.success === true) {
 					MessageToast.show(data.msg);
 				} else if(data.success === false) {
-					// MessageToast.show(data.msg);
 					oMessageText.setText(data.msg);
 					oDialog.insertContent(oMessageText);
 					oDialog.open();
@@ -177,7 +176,7 @@ sap.ui.define([
 				let oView = this;
 				var oModel = new JSONModel(); 
 				$.ajax({
-					url: "./api/assignment/list",
+					url: "./api/bookings/list",
 					headers: {
 						Authorization: window.localStorage.token
 					}
@@ -208,14 +207,14 @@ sap.ui.define([
 				.done(function(data, status, jqXHR){
 					// load data from URL
 					oModel.setData(data);
-					sap.ui.getCore().setModel(oModel, "assignVehicleModel");
+					sap.ui.getCore().setModel(oModel, "bookingsModel");
 					oView.getView().setModel(oModel);
 				});
 			}.bind(this), 1000);
 		},
 
 		onSearch: function(oEvent){
-			var oTable = this.byId("tableAssignVehicleId");
+			var oTable = this.byId("tablevehicleLogId");
 			var oSearchField = this.byId("searchField");
 			var sQuery = oSearchField.getValue();
 			var aFilters = [];
@@ -230,6 +229,5 @@ sap.ui.define([
 			var oDateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern: "dd MMM YYYY"});
 			return oDateFormat.format(new Date(v));	
 		}
-
 	});
 });

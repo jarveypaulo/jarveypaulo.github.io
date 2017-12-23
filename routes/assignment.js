@@ -23,14 +23,14 @@ router.post('/add', passport.authenticate('jwt', { session: false }),  (req, res
         username: req.body.username,
         name: req.body.name,
         plateNo: req.body.plateNo,
-        dateAssigned: req.body.dateAssigned
+        dateAssigned: Date(req.body.dateAssigned)
     });
     Assignments.addAssignments(newAssignment, (err, assignment) => {
         if (err){
             let updatedAssignment = {};
             updatedAssignment.name = req.body.name,
             updatedAssignment.plateNo = req.body.plateNo;
-            updatedAssignment.dateAssigned = req.body.dateAssigned;
+            updatedAssignment.dateAssigned = Date(req.body.dateAssigned);
         
             let query = {username: req.body.username}
         
@@ -88,7 +88,8 @@ router.delete('/user', passport.authenticate('jwt', { session: false }), (req, r
     // check open booking for that Vehicle
     let queryOpenBook = {
         username: req.body.username,
-        releasedDate: ""
+        mileageEnd: null
+        // releasedDate: Date("")
     }
     Bookings.openBookingVehicle(queryOpenBook, (err, booking) => {
         if (booking) {

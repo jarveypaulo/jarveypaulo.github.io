@@ -18,6 +18,16 @@ router.get('/list', passport.authenticate('jwt', { session: false }), (req, res,
     });
 });
 
+router.get('/dailylist', passport.authenticate('jwt', { session: false }), (req, res, next) => {
+    Bookings.getBookingsDaily(function(err, bookings) {
+        var bookingsAll = [];
+        bookings.forEach(function(booking) {
+            bookingsAll.push(booking);
+        }, this);
+        res.send({Bookings : bookingsAll});
+    });
+});
+
 // Add New Bookings
 router.post('/add', passport.authenticate('jwt', { session: false }), (req, res, next) => {    
     Vehicle.getVehicleByplateNo(req.body.plateNo, function(err, vehicle) {
@@ -30,7 +40,8 @@ router.post('/add', passport.authenticate('jwt', { session: false }), (req, res,
             // check open booking for that Vehicle
             let query = {
                 plateNo: req.body.plateNo,
-                releasedDate: ""
+                mileageEnd: null
+                // releasedDate: Date("")
             }
             Bookings.openBookingVehicle(query, (err, booking) => {
                 if (booking) {
@@ -42,10 +53,10 @@ router.post('/add', passport.authenticate('jwt', { session: false }), (req, res,
                     let newBookings = new Bookings({
                         username: req.body.username,
                         plateNo: req.body.plateNo,
-                        bookedDate: req.body.bookedDate,
-                        releasedDate: req.body.releasedDate,
+                        bookedDate: Date(req.body.bookedDate),
+                        // releasedDate: Date(req.body.releasedDate),
                         mileageStart: req.body.mileageStart,
-                        mileageEnd: req.body.mileageEnd
+                        // mileageEnd: req.body.mileageEnd
                     });
         
                     Bookings.addBookings(newBookings, (err, booking) => {
@@ -59,82 +70,23 @@ router.post('/add', passport.authenticate('jwt', { session: false }), (req, res,
             })            
         }
     });
-
-
-    // Bookings.getLastMileageOfVehicle(req.body.plateNo, function(err, result) {
-    //     if(!result){
-    //         let newBookings = new Bookings({
-    //             username: req.body.username,
-    //             plateNo: req.body.plateNo,
-    //             bookedDate: req.body.bookedDate,
-    //             releasedDate: req.body.releasedDate,
-    //             mileageStart: req.body.mileageStart,
-    //             mileageEnd: req.body.mileageEnd
-    //         });
-
-    //         Bookings.addBookings(newBookings, (err, booking) => {
-    //             if (err){
-    //                 res.json({success: false, msg:'Failed to ride the vehicle'});
-    //             } else {
-    //                 res.json({success: true, msg: 'Vehicle ridden successfully'});
-    //             }
-    //         });
-    //         return;
-    //     }
-    //     if(req.body.mileageStart < result.mileageEnd){
-    //         res.json({
-    //             success: false, 
-    //             msg:'Last recorded mileage is '+result.mileageEnd+'. New mileage must be same or greater than this.'
-    //         });
-    //     } else {
-    //         // check open booking for that Vehicle
-    //         let query = {
-    //             plateNo: req.body.plateNo,
-    //             releasedDate: ""
-    //         }
-    //         Bookings.openBookingVehicle(query, (err, booking) => {
-    //             if (booking) {
-    //                 res.json({
-    //                     success: false, 
-    //                     msg:'Vehicle '+booking.plateNo+' is being driven by '+booking.username+'. Wait until it is parked.'
-    //                 });
-    //             } else {
-    //                 let newBookings = new Bookings({
-    //                     username: req.body.username,
-    //                     plateNo: req.body.plateNo,
-    //                     bookedDate: req.body.bookedDate,
-    //                     releasedDate: req.body.releasedDate,
-    //                     mileageStart: req.body.mileageStart,
-    //                     mileageEnd: req.body.mileageEnd
-    //                 });
-        
-    //                 Bookings.addBookings(newBookings, (err, booking) => {
-    //                     if (err){
-    //                         res.json({success: false, msg:'Failed to ride the vehicle'});
-    //                     } else {
-    //                         res.json({success: true, msg: 'Vehicle ridden successfully'});
-    //                     }
-    //                 });
-    //             }
-    //         })            
-    //     }
-    // });
 });
 
 // Update Bookings
 router.put('/add', passport.authenticate('jwt', { session: false }), (req, res, next) => {
     let updatedBookings = {};
     // updatedBookings.plateNo = req.body.plateNo;
-    updatedBookings.releasedDate = req.body.releasedDate;
+    updatedBookings.releasedDate = Date(req.body.releasedDate);
     updatedBookings.mileageEnd = req.body.mileageEnd;
 
     let query = {
         username: req.body.username,
         plateNo: req.body.plateNo,
-        bookedDate: req.body.bookedDate,
-        releasedDate: ""
+        // bookedDate: Date(req.body.bookedDate),
+        mileageEnd: null
+        // releasedDate: Date("")
     }
-
+    // console.log(query);
     Bookings.updateBookings(query, updatedBookings, (err, booking) => {
         if (err){
             res.json({success: false, msg:'Failed to update vehicle ride details'});
@@ -160,7 +112,8 @@ router.put('/add', passport.authenticate('jwt', { session: false }), (req, res, 
 router.get('/open', passport.authenticate('jwt', { session: false }),  (req, res, next) => {
     // empty Release Date
     let query = {
-        releasedDate: ""
+        mileageEnd: null
+        // releasedDate: Date("")
     };
 
     Bookings.openBookings(query, function(err, bookings) {

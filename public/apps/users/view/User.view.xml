@@ -22,14 +22,14 @@
 						<headerToolbar>
 							<Toolbar>
 								<Title
-										id="tableHeader"
-										text="{i18n>ListOfAllUsers}"/>
+									id="tableHeader"
+									text="{i18n>ListOfAllUsers}"/>
 								<ToolbarSpacer/>
 								<SearchField
-										id="searchField"
-										search="onSearch"
-										tooltip="{Search drivers}"
-										width="55%"/>
+									id="searchField"
+									search="onSearch"
+									tooltip="{Search drivers}"
+									width="55%"/>
 							</Toolbar>
 						</headerToolbar>
                         <items>

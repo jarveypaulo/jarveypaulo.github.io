@@ -10,10 +10,10 @@ const BookingsSchema = mongoose.Schema({
         type: String
     },
     bookedDate: {
-        type: String
+        type: Date
     },
     releasedDate: {
-        type: String
+        type: Date
     },
     mileageStart: {
         type: Number
@@ -50,6 +50,12 @@ module.exports.openBookings = function(query, callback) {
 
 module.exports.getBookingsAll = function(callback) {
     const query = {};
+    Bookings.find(query, callback);
+}
+
+module.exports.getBookingsDaily = function(callback) {
+    var threeDaysAgo = new Date() - 3;
+    let query = {bookedDate: threeDaysAgo}
     Bookings.find(query, callback);
 }
 

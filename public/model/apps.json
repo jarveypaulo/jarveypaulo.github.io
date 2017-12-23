@@ -8,8 +8,8 @@
 			"iconMenu": "visits",
 			"routeName": "assignment"
 		},{
-			"header" : "Ride a Vehicle",
-			"subheader": "Vehicle Log",
+			"header" : "Ride and Park a Vehicle",
+			"subheader": "Record the Mileage",
 			"icon": "insurance-car",
 			"footer": "ride and park",
 			"iconMenu": "insurance-car",
@@ -31,6 +31,15 @@
 			"icon": "supplier",
 			"iconMenu": "supplier",
 			"routeName": "users"
+		},
+		{
+			"header": "Vehicle Log",
+			"subheader": "Mileage Records",
+			"footer": "display mileage history",
+			"unitFooter": "",
+			"icon": "activity-items",
+			"iconMenu": "activity-items",
+			"routeName": "vehicleLog"
 		}
 	]
 }

@@ -15,7 +15,7 @@ const AssignmentsSchema = mongoose.Schema({
         type: String
     },
     dateAssigned: {
-        type: String
+        type: Date
     }
 });
 

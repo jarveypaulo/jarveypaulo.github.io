@@ -4,9 +4,7 @@
 	<App>
 		<pages>
 			<Page id="vehicleListPage"  title="{i18n>VehicleList}"
-            
-            class="sapUiResponsiveContentPadding"
-            >
+            	class="sapUiResponsiveContentPadding">
 				<headerContent>
 					<Button icon="sap-icon://home" tooltip="Go to Launchpad" press="returnToLaunchpad"/>
 				</headerContent>

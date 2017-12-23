@@ -12,6 +12,7 @@
         contentWidth="100px"
 		contentHeight="60px">
         <Button id="idLogin" 
+			icon="sap-icon://cause" 
 			text="Log On" 
 			type="Transparent" press="onLogon" visible="true"/>
 	</Popover>

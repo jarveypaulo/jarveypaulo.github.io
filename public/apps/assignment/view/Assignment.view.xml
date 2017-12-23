@@ -50,10 +50,7 @@
 										text="{i18n>TableDriverColumnTitle}"/>
 							</Column>
 							<Column
-									id="nameColumn"
-									minScreenWidth="Tablet"
-									width="12rem" 
-									demandPopin="false">
+									id="nameColumn">
 								<Text text="{i18n>TableNameColumnTitle}"/>
 							</Column>
 							<Column
@@ -63,8 +60,7 @@
 								<Text text="{i18n>TableDateAssignedColumnTitle}"/>
 							</Column>
 							<Column
-									id="assignedVehicleColumn"
-									hAlign="End">
+									id="assignedVehicleColumn">
 								<Text text="{i18n>TableAssignedVehicleColumnTitle}"/>
 							</Column>
 						</columns>
@@ -74,7 +70,9 @@
 									<ObjectIdentifier
 											title="{username}"/>
 									<Text text = "{name}"/>
-									<Text text = "{dateAssigned}"/>
+									<Text text = "{
+										path: 'dateAssigned',
+										formatter:'.formatDate'}"/>
 									<Text text = "{plateNo}"/>
 								</cells>
 							</ColumnListItem>

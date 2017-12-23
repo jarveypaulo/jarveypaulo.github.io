@@ -51,6 +51,7 @@ sap.ui.define([
 
 		onLogon: function(oEvent) {
 			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+			location.reload();
 			oRouter.navTo("login");
 		}
 	});

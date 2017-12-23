@@ -127,6 +127,10 @@
 				"name": "profile",
 				"pattern": "fleet/mm/apps/profile",
 				"target": "profile"
+			}, {
+				"name": "vehicleLog",
+				"pattern": "fleet/mm/apps/vehicleLog",
+				"target": "vehicleLog"
 			}],
 			"targets": {
 				"menu": {
@@ -235,6 +239,12 @@
 					"viewType": "XML",
 					"viewPath": "mm.apps.profile.view",
 					"viewName": "Profile",
+					"viewLevel" : 3
+				},
+				"vehicleLog": {
+					"viewType": "XML",
+					"viewPath": "mm.apps.vehicleLog.view",
+					"viewName": "vehicleLog",
 					"viewLevel" : 3
 				}
 			}

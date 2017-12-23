@@ -132,14 +132,15 @@ sap.ui.define([
 
 				// If there no assignment for that username
 				if (result === null){
-					var d = new Date();
-					var sDateAssigned = ("0" + d.getDate()).slice(-2) + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" +
-						d.getFullYear() + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
+					// var d = new Date();
+					// var sDateAssigned = ("0" + d.getDate()).slice(-2) + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" +
+					// 	d.getFullYear() + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
+					var dAssignedDate = Date.now();
 					var formData = {
 						username: sInpUsername,
 						name: sName,
 						plateNo: sInpPlateNo,
-						dateAssigned: sDateAssigned
+						dateAssigned: dAssignedDate
 					};
 					formData = JSON.stringify(formData);
 					var oRouter = sap.ui.core.UIComponent.getRouterFor(this);

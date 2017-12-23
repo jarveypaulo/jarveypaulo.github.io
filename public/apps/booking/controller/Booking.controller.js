@@ -148,7 +148,8 @@ sap.ui.define([
 						}
 					}
 					if(result != null){
-						oInputBookedDate.setValue(result.bookedDate);
+						// oInputBookedDate.setValue(result.bookedDate);
+						oInputBookedDate.setValue(oView.formatDate(result.bookedDate));
 						oInpStartMileage.setValue(result.mileageStart);
 
 						oInpStartMileage.setEditable(false).setRequired(false);
@@ -211,9 +212,9 @@ sap.ui.define([
 				return;
 			}
 			// DD-MM-YYYY HH:MM
-			var d = new Date();
-			var sBookDate = ("0" + d.getDate()).slice(-2) + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" +
-				d.getFullYear() + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
+			// var d = new Date();
+			// var sBookDate = ("0" + d.getDate()).slice(-2) + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" +
+			// 	d.getFullYear() + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
 			// Set Booked Date
 			let oInputBookedDate = this.byId('bookedDate_id');
 			
@@ -225,15 +226,18 @@ sap.ui.define([
 				// oBtnChangeVehicle = this.byId('btnChangeVehicleId');
 
 			// SAVE the new booking
+			var dBookedDate = Date.now();
 			var oBookings = {
 				username: window.localStorage.username,
 				plateNo: sPlateNo, // this.byId('assignedVehicle_id').getValue(),
-				bookedDate: sBookDate,
-				mileageStart: this.byId('startingMileage_id').getValue(),
-				releasedDate: "",
-				mileageEnd: ""
+				// bookedDate: sBookDate,
+				bookedDate: dBookedDate,
+				mileageStart: this.byId('startingMileage_id').getValue()
+				// releasedDate: "",
+				// mileageEnd: ""
 			};
 			oBookings = JSON.stringify(oBookings);
+			let oView = this;
 			$.ajax({
 				url:"./api/bookings/add",
 				type:"POST",
@@ -252,7 +256,9 @@ sap.ui.define([
 				if (data.success === true) {
 					MessageToast.show("Booking is successful!");
 
-					oInputBookedDate.setValue(sBookDate);
+					// oInputBookedDate.setValue(sBookDate);
+					dBookedDate = oView.formatDate(dBookedDate);
+					oInputBookedDate.setValue(dBookedDate);
 					oInpStartMileage.setEditable(false).setRequired(false);
 					oInpEndMileage.setEditable(true).setRequired(true);
 					oBtnBook.setEnabled(false);
@@ -315,16 +321,17 @@ sap.ui.define([
 			let sPlateNo = this.byId('assignedVehicle_id').getValue();
 
 			// DD-MM-YYYY HH:MM
-			var d = new Date();
-			var sReleaseDate = ("0" + d.getDate()).slice(-2) + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" +
-				d.getFullYear() + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
+			// var d = new Date();
+			// var sReleaseDate = ("0" + d.getDate()).slice(-2) + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" +
+			// 	d.getFullYear() + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
 
 			// UPDATE the booking
+			var dReleasedDate = Date.now();
 			var oBookings = {
 				username: window.localStorage.username,
 				plateNo: sPlateNo,
 				bookedDate: oInputBookedDate.getValue(),
-				releasedDate: sReleaseDate,
+				releasedDate: dReleasedDate,
 				mileageEnd: nEndingMileage
 			};
 			oBookings = JSON.stringify(oBookings);
@@ -383,6 +390,12 @@ sap.ui.define([
 
 		onExit : function(){
 			// this.destroy();
+		},
+
+		formatDate : function(v){
+			jQuery.sap.require("sap.ui.core.format.DateFormat");
+			var oDateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern: "dd MMM YYYY"});
+			return oDateFormat.format(new Date(v));	
 		}
 	});
 });
