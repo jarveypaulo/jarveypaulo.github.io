@@ -11,23 +11,6 @@ sap.ui.define([
 
 	return BaseController.extend("mm.apps.assignment.controller.NewAssignment", {
 		onInit: function() {
-			let oMessageText = new Text();
-			let oDialog = new Dialog({
-				title: 'Error',
-				type: 'Message',
-				state: 'Error',
-				beginButton: new Button({
-					text: 'OK',
-					press: function () {
-						oDialog.close();
-					}
-				}),
-				afterClose: function() {
-					oDialog.destroy();
-				}
-			});
-
-
 			let oView = this;
 			let oUserModel = sap.ui.getCore().getModel("userModel");
 			if (oUserModel != null) {
@@ -43,14 +26,10 @@ sap.ui.define([
 					}
 				})
 				.fail(function(){
-					// MessageToast.show("Error connecting to the Server");
-					oMessageText.setText("Error connecting to the Server");
-					oDialog.insertContent(oMessageText);
-					oDialog.open();
+					oView.issueMessage('Error connecting to the Server');
 					return;
 				})
 				.done(function(data, status, jqXHR){
-					// load data from URL
 					oModel.setData(data);
 					sap.ui.getCore().setModel(oModel, "userModel");
 					oView.getView().setModel(oModel, "userModel");
@@ -69,10 +48,7 @@ sap.ui.define([
 					}
 				})
 				.fail(function(){
-					// MessageToast.show("Error connecting to the Server");
-					oMessageText.setText("Error connecting to the Server");
-					oDialog.insertContent(oMessageText);
-					oDialog.open();
+					oView.issueMessage('Error connecting to the Server');
 					return;
 				})
 				.done(function(data, status, jqXHR){
@@ -82,10 +58,6 @@ sap.ui.define([
 					oView.getView().setModel(oNewVehicleModel);
 				});
 			}
-		},
-		
-		onBeforeRendering : function () {
-
 		},
         
 		returnToLaunchpad: function(oEvent) {
@@ -97,7 +69,7 @@ sap.ui.define([
 			let sInpUsername = this.byId('InputDriverUsername').getSelectedItem().mProperties.key,
 				sName = this.byId('InputDriverUsername').getSelectedItem().mProperties.additionalText,
 				sInpPlateNo = this.byId('InputVehiclePlateNo').getSelectedItem().mProperties.key;
-
+			let oView = this;
 			// Check if username is already assigned
 			if (sInpUsername) {
 				let oAssignVehicle = sap.ui.getCore().getModel("assignVehicleModel");
@@ -112,29 +84,8 @@ sap.ui.define([
 					}
 				}
 				
-
-				let oMessageText = new Text();
-				let oDialog = new Dialog({
-					title: 'Error',
-					type: 'Message',
-					state: 'Error',
-					beginButton: new Button({
-						text: 'OK',
-						press: function () {
-							oDialog.close();
-						}
-					}),
-					afterClose: function() {
-						oDialog.destroy();
-					}
-				});
-				
-
 				// If there no assignment for that username
 				if (result === null){
-					// var d = new Date();
-					// var sDateAssigned = ("0" + d.getDate()).slice(-2) + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" +
-					// 	d.getFullYear() + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
 					var dAssignedDate = Date.now();
 					var formData = {
 						username: sInpUsername,
@@ -155,35 +106,46 @@ sap.ui.define([
 						}
 					})
 					.fail(function(){
-						// MessageToast.show("Error connecting to the Server");
-						oMessageText.setText("Error connecting to the Server");
-						oDialog.insertContent(oMessageText);
-						oDialog.open();
+						oView.issueMessage('Error connecting to the Server');
 						return;
 					})
 					.done(function(data,s,o){
 						if (data.success === true) {
-							// MessageToast.show("You have successfully assigned the user.");
 							MessageToast.show(data.msg);
 							oRouter.navTo("assignment");
 						} else if(data.success === false) {
-							oMessageText.setText(data.msg);
-							oDialog.insertContent(oMessageText);
-							oDialog.open();
+							oView.issueMessage(data.msg);
 							return;
 						}
 					});
 					// same username, user already assigned
 				} else {
-					// MessageToast.show("Username already assigned to a vehicle.");
-					oMessageText.setText("Username already assigned to a vehicle.");
-					oDialog.insertContent(oMessageText);
-					oDialog.open();
+					oView.issueMessage('Username already assigned to a vehicle.');
 					return;
 				}
 			}
+		},
 
-			
+		issueMessage : function(iv_message){
+			let oMessageText = new Text();
+			let oDialog = new Dialog({
+				title: 'Error',
+				type: 'Message',
+				state: 'Error',
+				beginButton: new Button({
+					text: 'OK',
+					press: function () {
+						oDialog.close();
+					}
+				}),
+				afterClose: function() {
+					oDialog.destroy();
+				}
+			});
+
+			oMessageText.setText(iv_message);
+			oDialog.insertContent(oMessageText);
+			oDialog.open();
 		}
 	});
 });

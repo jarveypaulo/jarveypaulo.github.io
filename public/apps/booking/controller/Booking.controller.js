@@ -276,37 +276,18 @@ sap.ui.define([
 			let nStartingMileage = this.byId('startingMileage_id').getValue(),
 				nEndingMileage   = this.byId('endingMileage_id').getValue();
 
-			let oMessageText = new Text();
-			let oDialog = new Dialog({
-				title: 'Error',
-				type: 'Message',
-				state: 'Error',
-				beginButton: new Button({
-					text: 'OK',
-					press: function () {
-						oDialog.close();
-					}
-				}),
-				afterClose: function() {
-					oDialog.destroy();
-				}
-			});
-
+			let oView = this;
 			
 			// Check if Ending Mileage is empty
 			if (!nEndingMileage) {
-				oMessageText.setText("Please input the ending mileage.");
-				oDialog.insertContent(oMessageText);
-				oDialog.open();
+				oView.issueMessage('Please input the ending mileage.');
 				return;
 			} 
 			let nStart = parseInt(nStartingMileage),
 				nEnd = parseInt(nEndingMileage);
 			// Check if Starting Mileage is Greater than Ending Mileage
 			if ( nStart > nEnd ) {
-				oMessageText.setText("Ending Mileage must be greater than Starting Mileage.");
-				oDialog.insertContent(oMessageText);
-				oDialog.open();
+				oView.issueMessage('Ending Mileage must be greater than Starting Mileage.');
 				return;
 			}
 			
@@ -316,14 +297,8 @@ sap.ui.define([
 				oInpEndMileage = this.byId('endingMileage_id'),
 				oBtnBook = this.byId('btnBookId'),
 				oBtnRelease = this.byId('btnReleaseId');
-				// oBtnChangeVehicle = this.byId('btnChangeVehicleId');
 
 			let sPlateNo = this.byId('assignedVehicle_id').getValue();
-
-			// DD-MM-YYYY HH:MM
-			// var d = new Date();
-			// var sReleaseDate = ("0" + d.getDate()).slice(-2) + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" +
-			// 	d.getFullYear() + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
 
 			// UPDATE the booking
 			var dReleasedDate = Date.now();
@@ -345,14 +320,10 @@ sap.ui.define([
 				}
 			})
 			.fail(function(){
-				oMessageText.setText("Error connecting to the server");
-				oDialog.insertContent(oMessageText);
-				oDialog.open();
+				oView.issueMessage('Error connecting to the server');
 			})
 			.done(function(data,s,o){
 				if (data.success === true) {
-					// MessageToast.show("Release success!");
-
 					let oDialogSuccess = new Dialog({
 						title: 'Release Success',
 						type: 'Message',
@@ -377,7 +348,6 @@ sap.ui.define([
 					oInpEndMileage.setValue("").setEditable(false).setRequired(false);
 					oBtnBook.setEnabled(true);
 					oBtnRelease.setEnabled(false);
-					// oBtnChangeVehicle.setVisible(true);
 
 				} else {
 					oMessageText.setText(data.msg);
@@ -388,14 +358,32 @@ sap.ui.define([
 
 		},
 
-		onExit : function(){
-			// this.destroy();
-		},
-
 		formatDate : function(v){
 			jQuery.sap.require("sap.ui.core.format.DateFormat");
 			var oDateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern: "dd MMM YYYY"});
 			return oDateFormat.format(new Date(v));	
+		},
+
+		issueMessage : function(iv_message){
+			let oMessageText = new Text();
+			let oDialog = new Dialog({
+				title: 'Error',
+				type: 'Message',
+				state: 'Error',
+				beginButton: new Button({
+					text: 'OK',
+					press: function () {
+						oDialog.close();
+					}
+				}),
+				afterClose: function() {
+					oDialog.destroy();
+				}
+			});
+
+			oMessageText.setText(iv_message);
+			oDialog.insertContent(oMessageText);
+			oDialog.open();
 		}
 	});
 });

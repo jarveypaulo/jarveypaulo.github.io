@@ -54,7 +54,8 @@ module.exports.getBookingsAll = function(callback) {
 }
 
 module.exports.getBookingsDaily = function(callback) {
-    var threeDaysAgo = new Date() - 3;
+    let today = new Date();
+    var threeDaysAgo = today.getDate - 3;
     let query = {bookedDate: threeDaysAgo}
     Bookings.find(query, callback);
 }
@@ -62,6 +63,10 @@ module.exports.getBookingsDaily = function(callback) {
 // Function to add Bookings to db
 module.exports.addBookings = function(newBookings, callback) {
     newBookings.save(callback);
+}
+
+module.exports.removeVehicleLog = function(query, callback) {
+    Bookings.remove(query, callback);
 }
 
 // Function to update Bookings to db

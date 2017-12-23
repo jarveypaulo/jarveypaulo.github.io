@@ -12,23 +12,6 @@ sap.ui.define([
 
 	return BaseController.extend("mm.apps.assignment.controller.Assignment", {
 		onInit: function() {
-			let oMessageText = new Text();
-			let oDialog = new Dialog({
-				title: 'Error',
-				type: 'Message',
-				state: 'Error',
-				beginButton: new Button({
-					text: 'OK',
-					press: function () {
-						oDialog.close();
-					}
-				}),
-				afterClose: function() {
-					oDialog.destroy();
-				}
-			});
-
-
 			var oModel = new JSONModel(); 
 			let oView = this;
 
@@ -55,17 +38,13 @@ sap.ui.define([
 						}
 					})
 					.fail(function(){
-						// MessageToast.show("Error connecting to the Server");
-						oMessageText.setText("Error connecting to the Server.");
-						oDialog.insertContent(oMessageText);
-						oDialog.open();
+						oView.issueMessage('Error connecting to the Server');
 						return;
 					})
 					.done(function(data, status, jqXHR){
 						// load data from URL
 						oNewProfileModel.setData(data);
 						sap.ui.getCore().setModel(oNewProfileModel, "profileModel");
-						// oView.getView().setModel(oNewProfileModel);
 
 						if(data.account_type === 'admin'){
 							oFooterToolbar.setVisible(true);
@@ -75,7 +54,6 @@ sap.ui.define([
 				}
 			} 
 
-			// get assigned vehicle data
 			$.ajax({
 				url: "./api/assignment/list",
 				headers: {
@@ -83,22 +61,14 @@ sap.ui.define([
 				}
 			})
 			.fail(function(){
-				// MessageToast.show("Error connecting to the Server");
-				oMessageText.setText("Error connecting to the Server.");
-				oDialog.insertContent(oMessageText);
-				oDialog.open();
+				oView.issueMessage('Error connecting to the Server');
 				return;
 			})
 			.done(function(data, status, jqXHR){
-				// load data from URL
 				oModel.setData(data);
 				sap.ui.getCore().setModel(oModel, "assignVehicleModel");
 				oView.getView().setModel(oModel);
 			});
-		},
-		
-		onBeforeRendering : function () {
-
 		},
         
 		returnToLaunchpad: function(oEvent) {
@@ -111,30 +81,14 @@ sap.ui.define([
 		},
 
 		onRemoveAssignment: function(oEvent){
-			let oMessageText = new Text();
-			let oDialog = new Dialog({
-				title: 'Error',
-				type: 'Message',
-				state: 'Error',
-				beginButton: new Button({
-					text: 'OK',
-					press: function () {
-						oDialog.close();
-					}
-				}),
-				afterClose: function() {
-					oDialog.destroy();
-				}
-			});
-
+			let oView = this;
 			// Get index of the selection
 			var aContexts = this.byId("tableAssignVehicleId").getSelectedContexts();
 			let sIndex = new Number;
 			var aUsername = [];
 			let oAssignVechicleModel = sap.ui.getCore().getModel("assignVehicleModel");
 			for (var i = 0; i < aContexts.length; i++) { 
-				sIndex = aContexts[i].sPath.substr(13,1);
-				// let sUsername = oAssignVechicleModel.getData().Assignments[sIndex].username;
+				sIndex = aContexts[i].sPath.substr(13);
 				aUsername.push(oAssignVechicleModel.getData().Assignments[sIndex].username);
 			}
 			var formData = {
@@ -151,20 +105,14 @@ sap.ui.define([
 				}
 			})
 			.fail(function(){
-				// MessageToast.show("Error connecting to the Server");
-				oMessageText.setText("Error connecting to the Server");
-				oDialog.insertContent(oMessageText);
-				oDialog.open();
+				oView.issueMessage('Error connecting to the Server');
 				return;
 			})
 			.done(function(data,s,o){
 				if (data.success === true) {
 					MessageToast.show(data.msg);
 				} else if(data.success === false) {
-					// MessageToast.show(data.msg);
-					oMessageText.setText(data.msg);
-					oDialog.insertContent(oMessageText);
-					oDialog.open();
+					oView.issueMessage(data.msg);
 					return;
 				}
 			});
@@ -183,30 +131,10 @@ sap.ui.define([
 					}
 				})
 				.fail(function(){
-					let oMessageText = new Text();
-					let oDialog = new Dialog({
-						title: 'Error',
-						type: 'Message',
-						state: 'Error',
-						beginButton: new Button({
-							text: 'OK',
-							press: function () {
-								oDialog.close();
-							}
-						}),
-						afterClose: function() {
-							oDialog.destroy();
-						}
-					});
-
-					// MessageToast.show("Error connecting to the Server");
-					oMessageText.setText("Error connecting to the Server");
-					oDialog.insertContent(oMessageText);
-					oDialog.open();
+					oView.issueMessage('Error connecting to the Server');
 					return;
 				})
 				.done(function(data, status, jqXHR){
-					// load data from URL
 					oModel.setData(data);
 					sap.ui.getCore().setModel(oModel, "assignVehicleModel");
 					oView.getView().setModel(oModel);
@@ -229,6 +157,28 @@ sap.ui.define([
 			jQuery.sap.require("sap.ui.core.format.DateFormat");
 			var oDateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern: "dd MMM YYYY"});
 			return oDateFormat.format(new Date(v));	
+		},
+
+		issueMessage : function(iv_message){
+			let oMessageText = new Text();
+			let oDialog = new Dialog({
+				title: 'Error',
+				type: 'Message',
+				state: 'Error',
+				beginButton: new Button({
+					text: 'OK',
+					press: function () {
+						oDialog.close();
+					}
+				}),
+				afterClose: function() {
+					oDialog.destroy();
+				}
+			});
+
+			oMessageText.setText(iv_message);
+			oDialog.insertContent(oMessageText);
+			oDialog.open();
 		}
 
 	});

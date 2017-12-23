@@ -11,44 +11,22 @@ sap.ui.define([
     
 	return BaseController.extend("mm.apps.login.controller.Login", {
 		onInit: function() {
-			// var oButton = this.byId('idAppControl');
-			// sap.ui.core.Control.setVisible(false);
+			
 		},
 
 		onLogin: function(sIsChangePassword) {
 			let sUsername = new String,
 				sPassword = this.byId('passwordInput').getValue();
-			
-			let oMessageText = new Text();
-			let oDialog = new Dialog({
-				title: 'Error',
-				type: 'Message',
-				state: 'Error',
-				beginButton: new Button({
-					text: 'OK',
-					press: function () {
-						oDialog.close();
-					}
-				}),
-				afterClose: function() {
-					oDialog.destroy();
-				}
-			});
-			
+			let oView = this;			
 			sUsername = this.byId('usernameInput').getValue();
 			// Validate Username and Password
 			if (sUsername==="") {
-				oMessageText.setText("Username is empty");
-				oDialog.insertContent(oMessageText);
-				oDialog.open();
+				oView.issueMessage('Username is a required field.');
 				return;
 			} else if (sPassword==="") {
-				oMessageText.setText("Password is empty");
-				oDialog.insertContent(oMessageText);
-				oDialog.open();
+				oView.issueMessage('Password is a required field.');
 				return;
 			}
-			
 			// convert username to capital
 			sUsername = sUsername.toUpperCase();
 
@@ -67,9 +45,7 @@ sap.ui.define([
 				contentType:"application/json"
 			})
 			.fail(function(){
-				oMessageText.setText("Error connecting to the server");
-				oDialog.insertContent(oMessageText);
-				oDialog.open();
+				oView.issueMessage('Error connecting to the server');
 			})
 			.done(function(data,s,o){
 				if (data.success === true) {
@@ -86,9 +62,7 @@ sap.ui.define([
 					}
 					
 				} else if(data.success === false) {
-					oMessageText.setText(data.msg);
-					oDialog.insertContent(oMessageText);
-					oDialog.open();
+					oView.issueMessage(data.msg);
 				}
 			});
 
@@ -96,6 +70,28 @@ sap.ui.define([
 
 		onChangePassword: function () {
 			this.onLogin('true');
+		},
+
+		issueMessage : function(iv_message){
+			let oMessageText = new Text();
+			let oDialog = new Dialog({
+				title: 'Error',
+				type: 'Message',
+				state: 'Error',
+				beginButton: new Button({
+					text: 'OK',
+					press: function () {
+						oDialog.close();
+					}
+				}),
+				afterClose: function() {
+					oDialog.destroy();
+				}
+			});
+
+			oMessageText.setText(iv_message);
+			oDialog.insertContent(oMessageText);
+			oDialog.open();
 		}
 	});
 });

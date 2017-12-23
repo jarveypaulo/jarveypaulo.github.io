@@ -11,66 +11,35 @@ sap.ui.define([
     
 	return BaseController.extend("mm.apps.login_cp.controller.Login_cp", {
 		onInit: function() {
-			// var oButton = this.byId('idAppControl');
-
 			
 		},
 
 		onSavePassword: function() {
 			let sPassword = this.byId('idNewPassword').getValue(),
 				sPassword2 = this.byId('idNewPassword2').getValue();
-
-			let oDialog = new Dialog({
-				title: 'Error',
-				type: 'Message',
-				state: 'Error',
-				beginButton: new Button({
-					text: 'OK',
-					press: function () {
-						oDialog.close();
-					}
-				}),
-				afterClose: function() {
-					oDialog.destroy();
-				}
-			});
-
-			let oMessageText = new Text();
-
+			let oView = this;
 			if (sPassword === "") {
-				oMessageText.setText("New password is empty.");
-				oDialog.insertContent(oMessageText);
-				oDialog.open();
+				oView.issueMessage('New password is empty.');
 				return;
 			} else if (sPassword2 === "") {
-				oMessageText.setText("The retyped password is empty.");
-				oDialog.insertContent(oMessageText);
-				oDialog.open();
+				oView.issueMessage('The retyped password is empty.');
 				return;
 			}
 			if(sPassword.length < 8){
-				oMessageText.setText("Your password must be at least 8 characters.");
-				oDialog.insertContent(oMessageText);
-				oDialog.open();
+				oView.issueMessage('Your password must be at least 8 characters.');
 				return;
 			}
 			if(sPassword.search(/[a-z]/i) < 0){
-				oMessageText.setText("Your password must contain at least one letter.");
-				oDialog.insertContent(oMessageText);
-				oDialog.open();
+				oView.issueMessage('Your password must contain at least one letter.');
 				return;
 			}
 			if(sPassword.search(/[0-9]/) < 0){
-				oMessageText.setText("Your password must contain at least one digit.");
-				oDialog.insertContent(oMessageText);
-				oDialog.open();
+				oView.issueMessage('Your password must contain at least one digit.');
 				return;
 			}
 			// passwords should be same
 			if(sPassword != sPassword2){
-				oMessageText.setText("The retyped password does not match the new password.");
-				oDialog.insertContent(oMessageText);
-				oDialog.open();
+				oView.issueMessage('The retyped password does not match the new password.');
 				return;
 			}
 			var formData = {
@@ -99,12 +68,32 @@ sap.ui.define([
 						location.reload();
 						oRouter.navTo("login");
 					} else if(data.success === false) {
-						oMessageText.setText(data.msg);
-						oDialog.insertContent(oMessageText);
-						oDialog.open();
+						oView.issueMessage(data.msg);
 					}
 				}
 			});
+		},
+
+		issueMessage : function(iv_message){
+			let oMessageText = new Text();
+			let oDialog = new Dialog({
+				title: 'Error',
+				type: 'Message',
+				state: 'Error',
+				beginButton: new Button({
+					text: 'OK',
+					press: function () {
+						oDialog.close();
+					}
+				}),
+				afterClose: function() {
+					oDialog.destroy();
+				}
+			});
+
+			oMessageText.setText(iv_message);
+			oDialog.insertContent(oMessageText);
+			oDialog.open();
 		}
 	});
 });

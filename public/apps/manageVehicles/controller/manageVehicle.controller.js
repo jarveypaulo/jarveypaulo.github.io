@@ -95,8 +95,6 @@ sap.ui.define([
 				return;
 			}
 
-
-
 			// Vehicel Type is required
 			if (!this.byId('InputVehicleType').getValue()) {
 				oMessageText.setText("Please input vehicle Plate Number.");
@@ -126,6 +124,28 @@ sap.ui.define([
 				return;
 			}
 
+		},
+
+		issueMessage : function(iv_message){
+			let oMessageText = new Text();
+			let oDialog = new Dialog({
+				title: 'Error',
+				type: 'Message',
+				state: 'Error',
+				beginButton: new Button({
+					text: 'OK',
+					press: function () {
+						oDialog.close();
+					}
+				}),
+				afterClose: function() {
+					oDialog.destroy();
+				}
+			});
+
+			oMessageText.setText(iv_message);
+			oDialog.insertContent(oMessageText);
+			oDialog.open();
 		}
 	});
 });

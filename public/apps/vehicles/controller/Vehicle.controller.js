@@ -12,23 +12,6 @@ sap.ui.define([
 
 	return BaseController.extend("mm.apps.vehicles.controller.Vehicle", {
 		onInit: function() {
-			let oMessageText = new Text();
-			let oDialog = new Dialog({
-				title: 'Error',
-				type: 'Message',
-				state: 'Error',
-				beginButton: new Button({
-					text: 'OK',
-					press: function () {
-						oDialog.close();
-					}
-				}),
-				afterClose: function() {
-					oDialog.destroy();
-				}
-			});
-
-
 			let oVehicleModel = sap.ui.getCore().getModel("vehicleModel");
 			let oView = this;
 			if (oVehicleModel != null) {
@@ -44,10 +27,7 @@ sap.ui.define([
 					}
 				})
 				.fail(function(){
-					// MessageToast.show("Error connecting to the Server");
-					oMessageText.setText("Error connecting to the Server.");
-					oDialog.insertContent(oMessageText);
-					oDialog.open();
+					oView.issueMessage('Error connecting to the Server');
 					return;
 				})
 				.done(function(data, status, jqXHR){
@@ -82,22 +62,6 @@ sap.ui.define([
 		},
 
 		handleRefresh : function (){
-			let oMessageText = new Text();
-			let oDialog = new Dialog({
-				title: 'Error',
-				type: 'Message',
-				state: 'Error',
-				beginButton: new Button({
-					text: 'OK',
-					press: function () {
-						oDialog.close();
-					}
-				}),
-				afterClose: function() {
-					oDialog.destroy();
-				}
-			});
-
 			setTimeout(function () {
 				this.byId("pullToRefresh").hide();
 				let oView = this;
@@ -109,14 +73,10 @@ sap.ui.define([
 					}
 				})
 				.fail(function(){
-					// MessageToast.show("Error connecting to the Server");
-					oMessageText.setText("Error connecting to the Server.");
-					oDialog.insertContent(oMessageText);
-					oDialog.open();
+					oView.issueMessage('Error connecting to the Server');
 					return;
 				})
 				.done(function(data, status, jqXHR){
-					// load data from URL
 					oNewVehicleModel.setData(data);
 					sap.ui.getCore().setModel(oNewVehicleModel, "vehicleModel");
 					oView.getView().setModel(oNewVehicleModel);
@@ -133,6 +93,28 @@ sap.ui.define([
 				aFilters.push(new Filter("plateNo", sap.ui.model.FilterOperator.Contains, sQuery));
 			}
 			oList.getBinding("items").filter(aFilters);
+		},
+
+		issueMessage : function(iv_message){
+			let oMessageText = new Text();
+			let oDialog = new Dialog({
+				title: 'Error',
+				type: 'Message',
+				state: 'Error',
+				beginButton: new Button({
+					text: 'OK',
+					press: function () {
+						oDialog.close();
+					}
+				}),
+				afterClose: function() {
+					oDialog.destroy();
+				}
+			});
+
+			oMessageText.setText(iv_message);
+			oDialog.insertContent(oMessageText);
+			oDialog.open();
 		}
 	});
 });

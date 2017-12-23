@@ -125,6 +125,24 @@ router.get('/open', passport.authenticate('jwt', { session: false }),  (req, res
     });
 });
 
+
+router.delete('/vehicleLogEntry', passport.authenticate('jwt', { session: false }), (req, res, next) => {
+    let query = {_id: req.body._id};
+    Bookings.removeVehicleLog(query, function(err, booking) {
+        if (err){
+            res.json({
+                success: false, 
+                msg:'Failed to delete the vehicle log entry.'
+            });
+        } else {
+            res.json({
+                success: true, 
+                msg: 'vehicle log entry has been deleted successfully.'
+            });
+        }
+    }); 
+});
+
 // Bookings
 router.get('/booking', passport.authenticate('jwt', { session: false }),  (req, res, next) => {
     res.json({ booking: req.booking });

@@ -24,10 +24,9 @@ sap.ui.define([
 					}
 				})
 				.fail(function(){
-					MessageToast.show("Error connecting to the Server");
+					oView.issueMessage('Error connecting to the Server');
 				})
 				.done(function(data, status, jqXHR){
-					// load data from URL
 					oNewProfileModel.setData(data);
 					sap.ui.getCore().setModel(oNewProfileModel, "profileModel");
 					oView.getView().setModel(oNewProfileModel);
@@ -39,43 +38,29 @@ sap.ui.define([
 		returnToLaunchpad: function(oEvent) {
 			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 			oRouter.navTo("launchpad");
+		},
+
+		issueMessage : function(iv_message){
+			let oMessageText = new Text();
+			let oDialog = new Dialog({
+				title: 'Error',
+				type: 'Message',
+				state: 'Error',
+				beginButton: new Button({
+					text: 'OK',
+					press: function () {
+						oDialog.close();
+					}
+				}),
+				afterClose: function() {
+					oDialog.destroy();
+				}
+			});
+
+			oMessageText.setText(iv_message);
+			oDialog.insertContent(oMessageText);
+			oDialog.open();
 		}
-
-		// _onRouteMatched : function (oEvent) {
-		// 	var oArgs, oView;
-		// 	oArgs = oEvent.getParameter("arguments");
-		// 	oView = this.getView();
-
-		// 	oView.setModel(sap.ui.getCore().getModel("userModel"));
-			
-		// 	oView.bindElement({
-		// 		path : "/Users/" + oArgs.userID,
-		// 		events : {
-		// 			change: this._onBindingChange.bind(this),
-		// 			dataRequested: function (oEvent) {
-		// 				oView.setBusy(true);
-		// 			},
-		// 			dataReceived: function (oEvent) {
-		// 				oView.setBusy(false);
-		// 			}
-		// 		}
-		// 	});
-		// },
-
-		// _onBindingChange : function (oEvent) {
-		// 	// No data for the binding
-		// 	if (!this.getView().getBindingContext()) {
-		// 		this.getRouter().getTargets().display("notFound");
-		// 	}
-		// },
-
-		// onShowResume : function (oEvent) {
-		// 	var oCtx = this.getView().getBindingContext();
-
-		// 	this.getRouter().navTo("employeeResume", {
-		// 		employeeId : oCtx.getProperty("EmployeeID")
-		// 	});
-		// }
 
 	});
 
