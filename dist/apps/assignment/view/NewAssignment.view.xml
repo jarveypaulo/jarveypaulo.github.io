@@ -1,0 +1,57 @@
+<mvc:View 
+	xmlns:core="sap.ui.core" 
+    xmlns:mvc="sap.ui.core.mvc" 
+    xmlns="sap.m" 
+    controllerName="mm.apps.assignment.controller.NewAssignment"
+	xmlns:f="sap.ui.layout.form"
+	xmlns:html="http://www.w3.org/1999/xhtml">
+	<App>
+		<pages>
+			<Page id="vehicleListPage"  title="{i18n>VehicleAssignment}"
+                class="sapUiResponsiveContentPadding" showNavButton="true"
+		        navButtonPress="onNavBack">
+				<content>
+					<f:SimpleForm id="simpleFormVehicleInformation"
+						editable="false"
+						layout="ResponsiveGridLayout"
+						labelSpanL="3" labelSpanM="3" emptySpanL="4" emptySpanM="4"
+						columnsL="2" columnsM="2">
+						<f:content>
+                            <Label text="{i18n>TableDriverColumnTitle}" />
+                            <Select id="InputDriverUsername"
+                                showSecondaryValues= "true"
+                                items="{
+                                    path: 'userModel>/Users',
+                                    sorter: { path: 'username' }
+                                }">
+                                <core:ListItem id="InputDriverUsernameVal" 
+									key="{userModel>username}" 
+									text="{userModel>username}" 
+									additionalText= "{userModel>firstname} {userModel>lastname}"/>
+                            </Select>
+                            <Label text="{i18n>VehicleIDColon}" />
+                            <Select id="InputVehiclePlateNo"
+                                showSecondaryValues= "true"
+                                items="{
+                                    path: '/Vehicles',
+                                    sorter: { path: 'plateNo' }
+                                }">
+                                <core:ListItem id="InputVehiclePlateNoVal" 
+									key="{plateNo}" 
+									text="{plateNo}" 
+									additionalText= "{manufacturer} {model} {manufacturerYear}"/>
+                            </Select>
+						</f:content>
+					</f:SimpleForm>
+				</content>
+				<footer>
+					<Toolbar>
+						<ToolbarSpacer/>
+						<Button id="btnNewAssignmentId" type="Emphasized" text="Save Assignment" icon="sap-icon://save"
+							press="onSaveNewAssignment"  enabled="true" />
+					</Toolbar>
+				</footer>
+			</Page>
+		</pages>
+	</App>
+</mvc:View>

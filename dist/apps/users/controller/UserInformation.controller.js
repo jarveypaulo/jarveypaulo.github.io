@@ -1,14 +1,17 @@
 sap.ui.define([
-	"mm/controller/BaseController"
-], function (BaseController) {
+	"mm/controller/BaseController",
+	"sap/ui/model/json/JSONModel",
+	'sap/m/MessageToast',
+	'sap/ui/model/Filter'
+], function (BaseController, JSONModel, MessageToast, Filter) {
 	"use strict";
 
-	return BaseController.extend("mm.apps.vehicles.controller.VehicleInformation", {
+	return BaseController.extend("mm.apps.users.controller.UserInformation", {
 
 		onInit: function () {
 			var oRouter = this.getRouter();
 
-			oRouter.getRoute("vehicle").attachMatched(this._onRouteMatched, this);
+			oRouter.getRoute("user").attachMatched(this._onRouteMatched, this);
 
 			// Hint: we don't want to do it this way
 			/*
@@ -29,10 +32,10 @@ sap.ui.define([
 			oArgs = oEvent.getParameter("arguments");
 			oView = this.getView();
 
-			oView.setModel(sap.ui.getCore().getModel("vehicleModel"));
+			oView.setModel(sap.ui.getCore().getModel("userModel"));
 			
 			oView.bindElement({
-				path : "/Vehicles/" + oArgs.vehicleID,
+				path : "/Users/" + oArgs.userID,
 				events : {
 					change: this._onBindingChange.bind(this),
 					dataRequested: function (oEvent) {
@@ -51,12 +54,6 @@ sap.ui.define([
 				this.getRouter().getTargets().display("notFound");
 			}
 		},
-
-		formatDate : function(v){
-			jQuery.sap.require("sap.ui.core.format.DateFormat");
-			var oDateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern: "dd MMM YYYY"});
-			return oDateFormat.format(new Date(v));	
-		}
 
 		// onShowResume : function (oEvent) {
 		// 	var oCtx = this.getView().getBindingContext();

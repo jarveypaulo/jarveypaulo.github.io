@@ -1,0 +1,110 @@
+<mvc:View 
+	xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" 
+    controllerName="mm.apps.vehicleLog.controller.vehicleLog"
+	xmlns:html="http://www.w3.org/1999/xhtml">
+	<App>
+		<pages>
+			<Page id="vehicleLogPage"  title="{i18n>vehicleLogTitle}"
+                class="sapUiResponsiveContentPadding">
+				<headerContent>			
+					<Button icon="sap-icon://home" tooltip="" press="returnToLaunchpad"/>
+				</headerContent>
+				<content>
+					<PullToRefresh
+						id="pullToRefresh"
+						refresh="handleRefresh" />
+					<Table
+						id="tablevehicleLogId"
+						busyIndicatorDelay="{worklistView>/tableBusyDelay}"
+						class="sapUiResponsiveMargin sapUiNoMarginTop"
+						growing="true"
+						growingScrollToLoad="true"
+						noDataText="{worklistView>/tableNoDataText}"
+						updateFinished="onUpdateFinished"
+						width="auto"
+						mode="None"
+						items="{
+							path: '/Bookings',
+                            sorter: [{
+                                path: 'plateNo',
+                                group: true
+                            },{
+                                path: 'bookedDate', 
+                                descending: true
+                            },{
+                                path: 'releasedDate', 
+                                descending: true
+                            }],
+			                groupHeaderFactory: '.getGroupHeader'
+						}">
+						<headerToolbar>
+							<Toolbar>
+								<Title
+									id="tableHeader"
+									text="Vehicle Log Records"/>
+								<ToolbarSpacer/>
+								<SearchField
+									id="searchField"
+									search="onSearch"
+									tooltip="Search Rides"
+									width="45%"/>
+							</Toolbar>
+						</headerToolbar>
+						<columns>
+							<Column id="usernameColumn">
+								<Text
+									id="usernameColumnTitle"
+									text="{i18n>TableUsernameColumnTitle}"/>
+							</Column>
+							<Column
+									id="bookedDateColumn"
+									demandPopin="true"
+									minScreenWidth="Tablet">
+								<Text text="{i18n>TableBookedDateColumnTitle}"/>
+							</Column>
+                            <Column
+									id="releasedDateColumn"
+									demandPopin="true"
+									minScreenWidth="Tablet">
+								<Text text="{i18n>TableReleasedDateColumnTitle}"/>
+							</Column>
+                            <Column
+									id="mileageStartColumn"
+                                    hAlign="End">
+								<Text text="{i18n>TableMileageStartColumnTitle}"/>
+							</Column>
+							<Column
+									id="mileageEndColumn"
+                                    hAlign="End">
+								<Text text="{i18n>TableMileageEndColumnTitle}"/>
+							</Column>
+						</columns>
+						<items>
+							<ColumnListItem id="List">
+								<cells>
+									<ObjectIdentifier
+										title="{username}"/>
+                                    <Text text = "{
+										path: 'bookedDate',
+										formatter:'.formatDate'}"/>
+                                    <Text text = "{
+										path: 'releasedDate',
+										formatter:'.formatDate'}"/>
+									<Text text = "{mileageStart}"/>
+									<Text text = "{mileageEnd}"/>
+								</cells>
+							</ColumnListItem>
+						</items>
+					</Table>
+				</content>
+				<footer>
+					<Toolbar id="idFooterToolbar"   visible="false">
+						<ToolbarSpacer/>
+						<Button id="btnRemoveVehicleLogId" type="Reject" text="Remove"  icon="sap-icon://delete" 
+							press="onRemoveVehicleLog" />
+					</Toolbar>
+				</footer>
+			</Page>
+		</pages>
+	</App>
+</mvc:View>

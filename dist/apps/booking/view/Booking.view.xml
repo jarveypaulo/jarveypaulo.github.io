@@ -1,0 +1,48 @@
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" 
+    controllerName="mm.apps.booking.controller.Booking"
+    xmlns:f="sap.ui.layout.form"
+	xmlns:html="http://www.w3.org/1999/xhtml">
+	<App>
+        <Page id="vehicleListPage"  title="{i18n>BookAndRelease}" class="sapUiResponsiveContentPadding">
+            <headerContent>
+                <Button icon="sap-icon://home" tooltip="" press="returnToLaunchpad"/>
+            </headerContent>
+            <content>
+                <VBox>
+                    <f:SimpleForm class="editableForm" columnsL="1" columnsM="1" editable="false" emptySpanL="4" emptySpanM="4" id="newEntitySimpleForm"
+                        labelSpanL="3" labelSpanM="3" layout="ResponsiveGridLayout" maxContainerCols="2" minWidth="1024"
+                        >
+                        <f:content>
+                            <Label text="{i18n>assignedVehicle}" />
+                            <Input name="Assigned Vehicle" id="assignedVehicle_id" 
+                                binding="{/assignment}"
+                                value="{plateNo}"
+                                enabled="false"/>
+                            <Label text="{i18n>bookedDate}" />
+                            <Input name="Date booked" id="bookedDate_id" 
+                                enabled="false"/>
+                            <Label text="{i18n>startingMileage}" />
+                            <Input name="Starting Mileage" id="startingMileage_id" 
+                                type="Number"  placeholder="Input Starting Mileage" 
+                                required="true"
+                                enabled="true"/>
+                            <Label text="{i18n>endingMileage}" />
+                            <Input name="Ending Mileage" id="endingMileage_id" 
+                                type="Number"  placeholder="Input Ending Mileage"
+                                enabled="true" editable="false"/>
+                        </f:content>
+                    </f:SimpleForm>
+                </VBox>
+            </content>
+            <footer>
+                <Toolbar>
+                    <ToolbarSpacer/>
+                    <Button id="btnBookId" type="Accept" text="Ride" icon="sap-icon://employee-approvals" 
+                        press="onBook"  enabled="true" />
+                    <Button id="btnReleaseId" type="Reject" text="Park" icon="sap-icon://employee-rejections" 
+                        press="onRelease" enabled="false"/>
+                </Toolbar>
+            </footer>
+        </Page>
+	</App>
+</mvc:View>

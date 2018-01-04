@@ -1,0 +1,51 @@
+<mvc:View
+	controllerName="mm.apps.profile.controller.Profile"
+	xmlns="sap.m"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:f="sap.ui.layout.form"
+	busyIndicatorDelay="0">
+	<Page
+		id="userPage"
+		title="User Profile"
+		class="sapUiResponsiveContentPadding">
+        <headerContent>
+            <Button icon="sap-icon://home" tooltip="Go to Launchpad" press="returnToLaunchpad"/>
+        </headerContent>
+		<content>
+			<Panel
+				id="userProfile"
+				width="auto"
+				class="sapUiResponsiveMargin sapUiNoContentPadding">
+                <headerToolbar>
+					<Toolbar>
+						<Title text="{i18n>UserIDColon} {/username}" level="H3"/>
+						<ToolbarSpacer />
+					</Toolbar>
+				</headerToolbar>
+				<content>
+					<f:SimpleForm
+						minWidth="1024"
+						editable="false"
+						layout="ResponsiveGridLayout"
+						labelSpanL="3" labelSpanM="3" emptySpanL="4" emptySpanM="4"
+						columnsL="1" columnsM="1">
+						<f:content>
+							<Label text="{i18n>FirstName}" />
+							<Text text="{/firstname}" />
+							<Label text="{i18n>LastName}" />
+							<Text text="{/lastname}" />
+							<Label text="{i18n>EmployeeId}" />
+							<Text text="{/employeeID}" />
+                            <Label text="{i18n>Email}" />
+							<Text text="{/email}" />
+							<Label text="{i18n>Mobile}" />
+							<Text text="{/mobile}" />
+							<Label text="{i18n>PhoneHome}" />
+							<Text text="{/homephone}" />
+						</f:content>
+					</f:SimpleForm>
+				</content>
+			</Panel>
+		</content>
+	</Page>
+</mvc:View>

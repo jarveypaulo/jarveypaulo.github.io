@@ -1,0 +1,39 @@
+/* Enter your custom styles here */
+.sapMSLITitleOnly {
+	font-size: 0.8rem;
+}
+
+.sapMListHdr {
+	background-color: #DDE5EC;
+}
+
+.sapMIBar-CTX .sapMTitle {
+	font-size: 1.2rem;
+}
+
+/* Popover 
+.popover-content-center {
+	margin-left: 15px;
+}
+
+.popover-content-social-center {
+	margin-top: 10px;
+	margin-left: 40px;
+}
+
+.social-icon {
+	padding: 0px 5px 0px 5px;
+}
+*/
+.sapMFlexItem {
+	padding-left: 3px;
+	padding-right: 3px;
+}
+
+.launchpad-header {
+	font-size: 18px;
+}
+
+.imageSize {
+	font-size : 7.5rem;
+}

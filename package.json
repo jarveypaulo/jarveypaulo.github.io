@@ -34,7 +34,9 @@
     "karma-openui5": "~0.2.2",
     "karma-phantomjs-launcher": "^1.0.4",
     "karma-qunit": "^1.2.1",
+    "grunt-text-replace": "^0.4.0",
     "karma-sinon": "^1.0.5",
-    "qunitjs": "^2.0.0"
+    "qunitjs": "^2.0.0",
+    "grunt-contrib-qunit": "^0.5.2"
   }
 }

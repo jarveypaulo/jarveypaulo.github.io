@@ -31,6 +31,12 @@ const VehicleSchema = mongoose.Schema({
     },
     mileage: {
         type: Number
+    },
+    mileageServiced: {
+        type: Number
+    },
+    dateServiced: {
+        type: Date
     }
 });
 

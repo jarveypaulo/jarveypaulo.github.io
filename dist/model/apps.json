@@ -1,0 +1,45 @@
+{
+	"apps" : [
+		{
+			"header" : "Assign a Vehicle",
+			"subheader": "Vehicle Assignment",
+			"icon": "visits",
+			"footer": "drive which vehicle?",
+			"iconMenu": "visits",
+			"routeName": "assignment"
+		},{
+			"header" : "Ride and Park a Vehicle",
+			"subheader": "Record the Mileage",
+			"icon": "insurance-car",
+			"footer": "ride and park",
+			"iconMenu": "insurance-car",
+			"routeName": "booking"
+		},
+		{
+			"header": "Vehicle Log",
+			"subheader": "Mileage Records",
+			"footer": "display mileage history",
+			"unitFooter": "",
+			"icon": "activity-items",
+			"iconMenu": "activity-items",
+			"routeName": "vehicleLog"
+		},
+		{
+			"header": "Vehicles",
+			"subheader": "Vehicle Information",
+			"icon": "car-rental",
+			"footer": "display vehicle details",
+			"iconMenu": "car-rental",
+			"routeName": "vehicles"
+		},
+		{
+			"header": "Drivers",
+			"subheader": "Driver Information",
+			"footer": "display driver details",
+			"unitFooter": "",
+			"icon": "supplier",
+			"iconMenu": "supplier",
+			"routeName": "users"
+		}
+	]
+}

@@ -1,0 +1,73 @@
+<mvc:View
+	controllerName="mm.apps.manageVehicles.controller.manageVehicle"
+	xmlns="sap.m"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:f="sap.ui.layout.form"
+	busyIndicatorDelay="0">
+	<Page
+		id="vehiclePage"
+		title="{i18n>ManageVehicle}"
+		showNavButton="true"
+		navButtonPress="onNavBack"
+		class="sapUiResponsiveContentPadding">
+		<content>
+			<Panel
+				id="vehiclePanel"
+				width="auto"
+				class="sapUiResponsiveMargin sapUiNoContentPadding">
+				<!-- <headerToolbar> -->
+					<!-- <Toolbar> -->
+						<!-- <Title text="{i18n>VehicleIDColon} {plateNo}" level="H2"/> -->
+						<!-- <ToolbarSpacer /> -->
+						<!-- <Link text="{i18n>FlipToResume}" tooltip="{i18n>FlipToResume.tooltip}" press="onShowResume" /> -->
+					<!-- </Toolbar> -->
+				<!-- </headerToolbar> -->
+				<content>
+					<f:SimpleForm id="simpleFormVehicleInformation"
+						editable="false"
+						layout="ResponsiveGridLayout"
+						labelSpanL="3" labelSpanM="3" emptySpanL="4" emptySpanM="4"
+						columnsL="2" columnsM="2">
+						<f:content>
+                            <Label text="{i18n>VehicleIDColon}" />
+							<Input id="InputPlateNo"  placeholder="Plate Number..." required="true" 
+                                width="322px"
+								type="Text"
+								value="{
+									type : '.customPlateNo'
+								}"/>
+                            <Label text="{i18n>vehicleType}" />
+							<Input id="InputVehicleType" type="Text" placeholder="Vehicle Type..." required="true" 
+                                width="322px"/>
+                            <Label text="{i18n>manufacturer}" />
+							<Input id="InputManufacturer" type="Text" placeholder="Manufacturer..." required="true" 
+                                width="322px"/>
+                            <Label text="{i18n>model}" />
+							<Input id="InputModel" type="Text" placeholder="Model..." required="true" 
+                                width="322px"/>
+                            <Label text="{i18n>manufacturerYear}" />
+							<Input id="InputYear" type="Number" placeholder="Year..." required="true" 
+                                width="322px"/>
+							<Label text="{i18n>color}" />
+							<Input id="InputColor" type="Text" placeholder="Color..." required="false" 
+                                width="322px"/>
+                            <Label text="{i18n>engineNo}" />
+							<Input id="InputEngineNo" type="Text" placeholder="Engine Number..." required="false" 
+                                width="322px"/>
+                            <Label text="{i18n>chassisNo}" />
+							<Input id="InputChassisNo" type="Text" placeholder="Chassis Number..." required="false" 
+                                width="322px"/>
+						</f:content>
+					</f:SimpleForm>
+				</content>
+			</Panel>
+		</content>
+		<footer>
+		<Toolbar>
+			<ToolbarSpacer/>
+			<Button id="btnSaveVehicleId" type="Accept" text="Save Vehicle" icon="sap-icon://save" 
+				press="onSaveVehicle"  enabled="true" />
+		</Toolbar>
+	</footer>
+	</Page>
+</mvc:View>
